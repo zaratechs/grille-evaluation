@@ -39,4 +39,8 @@ Commits conventionnels.
   pourcentage au dixième, points au centième, appréciation globale. Statuts « complète »,
   « incomplète » (critère pondéré non évalué), « pondération invalide » (total ≠ 100 %) et
   « vide ». Synthèse du groupe : moyenne et médiane des notes complètes.
+- Les 25 modèles de grilles de Paulo Mendonça (5 critères, descripteurs des 5 niveaux),
+  repris tels quels de l'outil d'origine. Appliquer un modèle remplace niveaux et critères,
+  garde titre, total et commentaires généraux.
+- Modèles personnels : enregistrer la grille courante, renommer, supprimer (nom unique).
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
