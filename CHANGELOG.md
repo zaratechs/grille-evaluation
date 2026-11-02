@@ -71,4 +71,8 @@ Commits conventionnels.
   pour partager sans données personnelles). Import validé : migré, réparé avec bilan,
   refusé sans rien modifier s'il dépasse 5 Mo ou n'est pas un dossier ; il remplace la
   grille et le groupe et fusionne les modèles personnels (sans doublon au réimport).
+- Messages en français pour chaque code d'erreur et chaque avertissement, et bilan de
+  réparation mis en phrases. Composants de base accessibles : bouton, champ (erreur liée
+  au champ), avis annoncé aux lecteurs d'écran, fenêtre de confirmation (focus sur
+  « Annuler », Échap, retour du focus).
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).

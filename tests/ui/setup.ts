@@ -16,6 +16,20 @@ for (const nom of ['localStorage', 'sessionStorage'] as const) {
   }
 }
 
+// jsdom n'implémente pas l'ouverture des `<dialog>` : imitation minimale (attribut `open`,
+// événement `close`). Le piégeage du focus est vérifié dans un vrai navigateur (tests e2e).
+const dialogue = globalThis.HTMLDialogElement?.prototype;
+if (dialogue && !('showModal' in dialogue && typeof dialogue.showModal === 'function')) {
+  dialogue.showModal = function (this: HTMLDialogElement) {
+    this.open = true;
+  };
+  dialogue.close = function (this: HTMLDialogElement) {
+    if (!this.open) return;
+    this.open = false;
+    this.dispatchEvent(new Event('close'));
+  };
+}
+
 afterEach(() => {
   cleanup();
   localStorage.clear();

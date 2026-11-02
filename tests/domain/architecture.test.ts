@@ -5,6 +5,7 @@ import { join, resolve } from 'node:path';
 const SRC = resolve(import.meta.dirname, '../../src');
 const DOMAINE = join(SRC, 'domain');
 const DATA_ACCESS = join(SRC, 'data-access');
+const APP = resolve(import.meta.dirname, '../../app');
 
 /** Le domaine reste pur : ni React, ni navigateur, ni interface, ni stockage. */
 const IMPORTS_INTERDITS =
@@ -93,8 +94,16 @@ describe('src/domain', () => {
   });
 });
 
-describe('src/ hors data-access', () => {
-  const fichiers = fichiersTs(SRC).filter((f) => !f.startsWith(DATA_ACCESS));
+describe('src/ hors data-access, et app/', () => {
+  const fichiers = [
+    ...fichiersTs(SRC).filter((f) => !f.startsWith(DATA_ACCESS)),
+    ...fichiersTs(APP),
+  ];
+
+  it('inclut l’interface et le point d’entrée', () => {
+    expect(fichiers.some((f) => f.includes(join('src', 'ui')))).toBe(true);
+    expect(fichiers.some((f) => f.startsWith(APP))).toBe(true);
+  });
 
   it.each(fichiers)('%s ne touche pas au stockage du navigateur', (fichier) => {
     expect(utiliseLeStockage(readFileSync(fichier, 'utf8'))).toBe(false);
