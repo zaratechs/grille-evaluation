@@ -1,0 +1,42 @@
+/* Tokens de l'identité visuelle. AUCUN hex ne doit exister ailleurs dans src/ui/ ni app/
+   (vérifié par tests/ui/tokens.test.ts, qui calcule aussi les contrastes WCAG).
+   Identité sobre : un seul bleu de marque, des neutres, des couleurs de statut. */
+@theme {
+  /* Marque — bleu, ancré sur #0c4a6e */
+  --color-marque-50: #ecf6fb;
+  --color-marque-100: #cfe7f3;
+  --color-marque-200: #a6d0e6;
+  --color-marque-300: #6fb1d4;
+  --color-marque-400: #3d8cbc;
+  --color-marque-500: #1f6f9f;
+  --color-marque-600: #145a86;
+  --color-marque-700: #0c4a6e;
+  --color-marque-800: #0a3d5c;
+  --color-marque-900: #082f47;
+
+  /* Neutres */
+  --color-surface: #ffffff;
+  --color-surface-attenue: #f5f7f9;
+  --color-texte: #16242c;
+  --color-texte-attenue: #566068;
+  --color-bordure: #d7e0e6; /* séparateurs décoratifs seulement */
+  --color-bordure-champ: #7b8790; /* contour des champs et boutons : ≥ 3:1 sur blanc */
+  --color-focus: var(--color-marque-600);
+
+  /* Statuts (texte foncé sur fond clair) */
+  --color-statut-info: #145a86;
+  --color-statut-info-fond: #ecf6fb;
+  --color-statut-ok: #0f6d3f;
+  --color-statut-ok-fond: #eafaf1;
+  --color-statut-avertissement: #8a5300;
+  --color-statut-avertissement-fond: #fff5e6;
+  --color-statut-erreur: #b3261e;
+  --color-statut-erreur-fond: #fdeeed;
+
+  /* Typographie : polices du système, aucune police téléchargée */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Formes : coins discrets */
+  --radius-carte: 0.5rem;
+  --radius-champ: 0.375rem;
+}
