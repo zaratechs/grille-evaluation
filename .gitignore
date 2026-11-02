@@ -1,0 +1,20 @@
+node_modules/
+coverage/
+dist/
+.DS_Store
+*.log
+
+# Playwright (E2E)
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Vercel (dossier local créé par la CLI)
+.vercel/
+
+# état d'exécution éphémère des skills superpowers
+.superpowers/
+
+# config locale de Claude Code
+.claude/
