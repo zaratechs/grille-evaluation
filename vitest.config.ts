@@ -1,6 +1,12 @@
 import { defineConfig } from 'vitest/config';
 import pkg from './package.json' with { type: 'json' };
 
+// Fuseau horaire fixe pour tous les tests, posé ici, avant le démarrage des processus de
+// test : un test ne peut pas le changer lui-même (il tourne dans un fil d'exécution
+// secondaire). L'heure du Québec rend visible le piège de la date UTC (lendemain le soir),
+// en local comme sur la CI, qui tourne en UTC.
+process.env.TZ = 'America/Toronto';
+
 // Même valeur qu'au build (vite.config.ts) : les tests voient la vraie version.
 const define = { __APP_VERSION__: JSON.stringify(pkg.version) };
 

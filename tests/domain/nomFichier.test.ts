@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { nomFichier } from '../../src/domain/nomFichier';
 
 const LE_2_NOVEMBRE = new Date(2026, 10, 2, 10, 0);
@@ -35,15 +35,10 @@ describe('nomFichier', () => {
   });
 });
 
+// Les tests tournent à l'heure du Québec (fixée dans vitest.config.ts).
 describe('date locale (bug de l’outil Scrum de la Trousse)', () => {
-  let fuseau: string | undefined;
-  beforeEach(() => {
-    fuseau = process.env.TZ;
-    process.env.TZ = 'America/Toronto';
-  });
-  afterEach(() => {
-    if (fuseau === undefined) delete process.env.TZ;
-    else process.env.TZ = fuseau;
+  it('les tests tournent bien à l’heure du Québec', () => {
+    expect(Intl.DateTimeFormat().resolvedOptions().timeZone).toBe('America/Toronto');
   });
 
   it('le 2 novembre à 23 h 30 au Québec reste le 2 novembre', () => {
