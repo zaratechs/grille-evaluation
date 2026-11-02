@@ -75,4 +75,9 @@ Commits conventionnels.
   réparation mis en phrases. Composants de base accessibles : bouton, champ (erreur liée
   au champ), avis annoncé aux lecteurs d'écran, fenêtre de confirmation (focus sur
   « Annuler », Échap, retour du focus).
+- État du dossier pour l'interface : chargé au démarrage, enregistré à chaque modification
+  réussie ; un refus du domaine ne change rien et rend son code. Avis pour une sauvegarde
+  réparée ou illisible, un stockage refusé, une écriture impossible (retiré dès que
+  l'écriture repasse) et une modification dans un autre onglet, qui met l'onglet en
+  lecture seule.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
