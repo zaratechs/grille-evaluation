@@ -63,6 +63,7 @@ export type CodeErreur =
   | 'nom-en-double'
   | 'critere-introuvable'
   | 'etudiant-introuvable'
+  | 'identifiant-en-double'
   | 'modele-introuvable'
   | 'version-inconnue'
   | 'version-future';
