@@ -1,11 +1,17 @@
 import { defineConfig } from 'vitest/config';
+import pkg from './package.json' with { type: 'json' };
+
+// Même valeur qu'au build (vite.config.ts) : les tests voient la vraie version.
+const define = { __APP_VERSION__: JSON.stringify(pkg.version) };
 
 export default defineConfig({
+  define,
   test: {
-    // vitest 4 n'hérite pas `pool` et `testTimeout` de la racine vers `test.projects` :
-    // ils sont donc posés dans chaque projet.
+    // Les projets reprennent la config racine (dont `define`) grâce à `extends: true`.
+    // vitest 4 n'hérite pas `pool` et `testTimeout` : ils sont posés dans chaque projet.
     projects: [
       {
+        extends: true,
         test: {
           name: 'node',
           include: ['tests/{domain,data,scripts}/**/*.{test,spec}.{mjs,ts}'],
@@ -14,6 +20,7 @@ export default defineConfig({
         },
       },
       {
+        extends: true,
         test: {
           name: 'jsdom',
           include: ['tests/ui/**/*.{test,spec}.{ts,tsx}'],
