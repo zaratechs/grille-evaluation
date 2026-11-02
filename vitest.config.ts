@@ -23,7 +23,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'jsdom',
-          include: ['tests/ui/**/*.{test,spec}.{ts,tsx}'],
+          include: ['tests/{ui,data-access}/**/*.{test,spec}.{ts,tsx}'],
           environment: 'jsdom',
           setupFiles: ['tests/ui/setup.ts'],
           pool: 'threads',
@@ -38,6 +38,7 @@ export default defineConfig({
       exclude: ['src/**/index.ts', 'src/data/**'],
       thresholds: {
         'src/domain/**': { lines: 100, functions: 100, statements: 100, branches: 100 },
+        'src/data-access/**': { lines: 100, functions: 100, statements: 100, branches: 100 },
       },
     },
   },

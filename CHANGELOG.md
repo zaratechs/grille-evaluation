@@ -47,4 +47,7 @@ Commits conventionnels.
 - Format de données versionné (version 1) et chaîne de migrations : une version absente
   ou plus récente que l'application est refusée, et les données reçues ne sont jamais
   modifiées.
+- Accès aux données (`src/data-access/`) : seul dossier autorisé à toucher au stockage et
+  aux fichiers du navigateur (vérifié par un test), couvert à 100 % ; identifiants uniques
+  avec repli quand `crypto.randomUUID` n'existe pas.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).

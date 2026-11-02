@@ -71,9 +71,10 @@ npx playwright install chromium   # une seule fois, pour les tests de bout en bo
 app/            point d'entrée et table des routes (#/…)
 src/domain/     cœur métier en TypeScript pur (sans React ni navigateur), API dans index.ts
 src/data/       les 25 modèles de grilles de Paulo Mendonça
+src/data-access/  seul accès au navigateur (stockage, fichiers) et aux identifiants
 src/ui/         interface : tokens, coquille (layout), pages
 scripts/        outils (garde de neutralité)
-tests/          tests Vitest (domain, data, scripts, ui) et Playwright (e2e)
+tests/          tests Vitest (domain, data, scripts, data-access, ui) et Playwright (e2e)
 docs/superpowers/  specs et plans de chaque phase
 ```
 

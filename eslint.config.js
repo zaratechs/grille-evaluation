@@ -28,7 +28,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['tests/ui/**/*.{ts,tsx}'],
+    files: ['src/data-access/**/*.ts', 'tests/{ui,data-access}/**/*.{ts,tsx}'],
     languageOptions: { globals: { ...globals.browser } },
   },
   prettier,
