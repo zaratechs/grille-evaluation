@@ -19,4 +19,7 @@ Commits conventionnels.
   Accueil et Transparence provisoires, page introuvable, message clair si une page plante.
 - Tests de bout en bout Playwright sur le site construit, avec scan axe sans violation.
 - CI GitHub Actions alignée sur `npm run ci` (alignement vérifié par un test).
+- Domaine (`src/domain/`) : types de données et retours d'erreur à codes stables ; sa
+  couverture de 100 % est bloquante dans `npm run ci` et la CI ; un test garantit qu'il
+  n'importe ni React ni le navigateur.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).

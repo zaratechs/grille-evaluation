@@ -42,7 +42,7 @@ npx playwright install chromium   # une seule fois, pour les tests de bout en bo
 | `npm run test:watch`       | Vitest en mode surveillance                                                    |
 | `npm run test:coverage`    | Vitest avec couverture v8 (seuil 100 % sur `src/domain/**`)                    |
 | `npm run test:e2e`         | Playwright (Chromium) sur le site construit, avec scan d'accessibilité axe     |
-| `npm run ci`               | lint → typecheck → check:neutralite → test → build → test:e2e                  |
+| `npm run ci`               | lint → typecheck → check:neutralite → test:coverage → build → test:e2e         |
 
 `npm run ci` exécute exactement les mêmes étapes que la CI GitHub Actions
 (`.github/workflows/ci.yml`) ; un test vérifie que les deux restent alignés.
