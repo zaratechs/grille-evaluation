@@ -1,3 +1,4 @@
+import { deplacer, sans, type Sens } from './listes';
 import { niveauValide } from './niveaux';
 import { lireNom } from './noms';
 import { POIDS_TOTAL } from './poids';
@@ -67,28 +68,15 @@ export function modifierDescripteur(
 }
 
 /** Échange le critère avec son voisin ; sans effet aux extrémités. */
-export function deplacerCritere(
-  dossier: Dossier,
-  id: string,
-  sens: 'haut' | 'bas',
-): Resultat<Dossier> {
-  const criteres = [...dossier.grille.criteres];
-  const i = criteres.findIndex((c) => c.id === id);
-  if (i === -1) return erreur('critere-introuvable');
-  const j = sens === 'haut' ? i - 1 : i + 1;
-  const voisin = criteres[j];
-  if (voisin === undefined) return ok(dossier);
-  criteres[j] = criteres[i] as Critere;
-  criteres[i] = voisin;
-  return ok(avecCriteres(dossier, criteres));
+export function deplacerCritere(dossier: Dossier, id: string, sens: Sens): Resultat<Dossier> {
+  const criteres = deplacer(dossier.grille.criteres, id, sens);
+  return criteres ? ok(avecCriteres(dossier, criteres)) : erreur('critere-introuvable');
 }
 
 /** Retire le critère, ainsi que ses niveaux et commentaires chez toutes les personnes. */
 export function retirerCritere(dossier: Dossier, id: string): Resultat<Dossier> {
   const { criteres } = dossier.grille;
   if (!criteres.some((c) => c.id === id)) return erreur('critere-introuvable');
-  const sans = <T>(entrees: Record<string, T>): Record<string, T> =>
-    Object.fromEntries(Object.entries(entrees).filter(([cle]) => cle !== id));
   return ok({
     ...avecCriteres(
       dossier,
@@ -96,8 +84,8 @@ export function retirerCritere(dossier: Dossier, id: string): Resultat<Dossier> 
     ),
     etudiants: dossier.etudiants.map((e) => ({
       ...e,
-      niveaux: sans(e.niveaux),
-      commentaires: sans(e.commentaires),
+      niveaux: sans(e.niveaux, id),
+      commentaires: sans(e.commentaires, id),
     })),
   });
 }

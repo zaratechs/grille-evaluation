@@ -31,4 +31,8 @@ Commits conventionnels.
   descripteurs, déplacer, retirer en cascade dans le groupe).
 - Retirer un niveau efface les évaluations à ce niveau au lieu de produire une note
   supérieure à 100 % (bug de l'outil d'origine).
+- Groupe : ajouter, renommer, retirer, réordonner les personnes étudiantes ; un nom déjà
+  présent est refusé, sans tenir compte des majuscules, des accents ni des espaces.
+- Évaluations : niveau par critère (de 1 à N), commentaire par critère, commentaire
+  général, réinitialisation d'une personne.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).

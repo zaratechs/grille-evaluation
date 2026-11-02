@@ -12,3 +12,12 @@ export function lireNom(texte: string, max = NOM_LONGUEUR_MAX): Resultat<string>
   if (nom.length > max) return erreur('nom-trop-long');
   return ok(nom);
 }
+
+/** Clé de comparaison des noms : sans majuscules, sans accents, espaces simplifiés. */
+export const cleNom = (nom: string): string =>
+  nom
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
