@@ -4,6 +4,7 @@ type Props = {
   etiquette: string;
   valeur: string;
   surSaisie: (texte: string) => void;
+  surSortie?: () => void;
   /** Message d'erreur, lié au champ et annoncé par les lecteurs d'écran. */
   erreur?: string | undefined;
   aide?: string;
@@ -22,6 +23,7 @@ export function Champ({
   etiquette,
   valeur,
   surSaisie,
+  surSortie,
   erreur,
   aide,
   multiligne = false,
@@ -37,6 +39,7 @@ export function Champ({
     id,
     value: valeur,
     disabled: desactive,
+    onBlur: surSortie,
     'aria-describedby': decrit,
     'aria-invalid': erreur ? true : undefined,
     className: STYLE_CHAMP,

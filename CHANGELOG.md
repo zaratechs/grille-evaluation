@@ -85,6 +85,11 @@ Commits conventionnels.
   focus va sur son titre après une navigation. Les avis s'affichent sous l'en-tête, avec
   leurs actions (télécharger l'originale, exporter, aller à Vos données, recharger) ; en
   lecture seule, les champs de la vue sont désactivés.
+- Vue Grille, première partie : titre et total de points (virgule acceptée), libellés des
+  niveaux, ajout (jusqu'à 10) et retrait du dernier niveau (jusqu'à 3), avec la raison
+  affichée quand un bouton est désactivé. Retirer un niveau déjà utilisé demande une
+  confirmation qui dit combien d'évaluations et de descripteurs seront effacés. Un texte
+  refusé reste dans son champ, avec son message, sans être enregistré.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Retiré
