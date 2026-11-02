@@ -66,6 +66,14 @@ describe('README', () => {
     expect(readme).toContain(`src/${dossier}/`);
   });
 
+  it('explique où sont les données, avec le préfixe de clé réellement utilisé', () => {
+    const prefixe = /PREFIXE = '([^']+)'/.exec(lire('src/data-access/stockage.ts'))?.[1];
+    expect(prefixe).toBeDefined();
+    expect(readme).toMatch(/^## Vos données$/m);
+    expect(readme).toContain(`\`${prefixe}`);
+    expect(readme).toMatch(/copie de secours/);
+  });
+
   it('explique le déploiement sur Vercel', () => {
     expect(readme).toMatch(/Vercel/);
     expect(readme).toContain('dist');

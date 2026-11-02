@@ -3,9 +3,10 @@
 Application web pour créer des grilles d'évaluation critériées, évaluer chaque personne
 étudiante d'un groupe et exporter les résultats.
 
-**État : phase 2 (domaine).** La coquille de l'application et le cœur métier (grille,
-groupe, calcul des notes, 25 modèles) sont en place. Le stockage, les écrans et les exports
-arrivent dans les phases suivantes (voir `docs/superpowers/specs/`).
+**État : phase 3 (persistance).** La coquille de l'application, le cœur métier (grille,
+groupe, calcul des notes, 25 modèles) et la sauvegarde (navigateur, export et import JSON)
+sont en place. Les écrans et les exports PDF, CSV et Word arrivent dans les phases
+suivantes (voir `docs/superpowers/specs/`).
 
 ## Principes
 
@@ -33,6 +34,25 @@ arrivent dans les phases suivantes (voir `docs/superpowers/specs/`).
   reçu ; un refus renvoie un code d'erreur stable (`nom-en-double`, `poids-invalide`…).
 - **Format versionné** : chaque sauvegarde porte un numéro de version ; `migrer()` met à
   jour les données anciennes et refuse celles d'une version future.
+
+## Vos données
+
+- **Où.** Le dossier (grille, groupe, modèles personnels) est enregistré dans le navigateur,
+  à chaque modification, sous la clé `grille-evaluation:dossier`. Rien n'est envoyé à un
+  serveur. Vider les données du site dans le navigateur efface le dossier : pensez à
+  l'exporter.
+- **Sauvegarde abîmée.** Au chargement, elle est réparée champ par champ, et un bilan dit
+  ce qui a été corrigé. L'originale est toujours gardée en copie de secours
+  (`grille-evaluation:copie-de-secours`) avant toute nouvelle écriture, et peut être
+  téléchargée.
+- **Autre onglet.** Si le dossier est modifié dans un autre onglet, celui-ci cesse
+  d'enregistrer jusqu'au rechargement, pour ne pas effacer ce travail.
+- **Export et import JSON.** L'export complet sert à changer d'ordinateur ou à garder
+  plusieurs groupes ; l'export « grille seule » partage une grille sans aucune donnée
+  personnelle. Un import remplace la grille et le groupe, et ajoute ses modèles personnels
+  aux vôtres. Tout fichier importé est vérifié et réparé ; un fichier de plus de 5 Mo, ou
+  qui n'est pas un dossier, est refusé sans rien modifier.
+- **Remise à zéro.** Elle ne supprime que les clés `grille-evaluation:*`.
 
 ## Prérequis
 
@@ -71,7 +91,8 @@ npx playwright install chromium   # une seule fois, pour les tests de bout en bo
 app/            point d'entrée et table des routes (#/…)
 src/domain/     cœur métier en TypeScript pur (sans React ni navigateur), API dans index.ts
 src/data/       les 25 modèles de grilles de Paulo Mendonça
-src/data-access/  seul accès au navigateur (stockage, fichiers) et aux identifiants
+src/data-access/  seul accès au navigateur : sauvegarde, autres onglets, export et import
+                  JSON, fichiers, identifiants
 src/ui/         interface : tokens, coquille (layout), pages
 scripts/        outils (garde de neutralité)
 tests/          tests Vitest (domain, data, scripts, data-access, ui) et Playwright (e2e)
