@@ -22,4 +22,6 @@ Commits conventionnels.
 - Domaine (`src/domain/`) : types de données et retours d'erreur à codes stables ; sa
   couverture de 100 % est bloquante dans `npm run ci` et la CI ; un test garantit qu'il
   n'importe ni React ni le navigateur.
+- Poids des critères en dixièmes entiers (16,7 % = 167) : saisie avec virgule ou point,
+  égalisation dont la somme fait toujours exactement 100 % (fin des `100.00000000000001`).
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
