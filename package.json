@@ -2,6 +2,7 @@
   "name": "grille-evaluation",
   "version": "0.1.0",
   "private": true,
+  "license": "CC-BY-NC-SA-4.0",
   "type": "module",
   "engines": {
     "node": ">=20"
