@@ -47,5 +47,10 @@ describe('API publique du domaine', () => {
     expect(domaine.VERSION_COURANTE).toBe(1);
     expect(domaine.POIDS_TOTAL).toBe(1000);
     expect(domaine.NIVEAUX_PAR_DEFAUT).toHaveLength(5);
+    expect(domaine.NIVEAUX_MIN).toBe(3);
+    expect(domaine.NIVEAUX_MAX).toBe(10);
+    expect(domaine.NOM_LONGUEUR_MAX).toBe(100);
+    expect(domaine.TITRE_LONGUEUR_MAX).toBe(200);
+    expect(domaine.TOTAL_POINTS_MAX).toBe(1000);
   });
 });

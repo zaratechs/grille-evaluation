@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { formaterPoids, formaterPourcentage, formaterPoints } from '../../src/domain/format';
 
 /** Espace insécable : « 87,5 % » ne se coupe jamais en fin de ligne. */
-const NBSP = ' ';
+const NBSP = '\u00A0';
 
 describe('formaterPoids (dixièmes de pour cent)', () => {
   it.each([
@@ -13,6 +13,21 @@ describe('formaterPoids (dixièmes de pour cent)', () => {
     [1000, '100,0'],
   ])('%i → « %s % »', (dixiemes, attendu) => {
     expect(formaterPoids(dixiemes)).toBe(`${attendu}${NBSP}%`);
+  });
+});
+
+describe('valeurs négatives (écart de pondération)', () => {
+  it.each([
+    [-5, `-0,5${NBSP}%`],
+    [-100, `-10,0${NBSP}%`],
+    [-1000, `-100,0${NBSP}%`],
+  ])('%i → « %s »', (dixiemes, attendu) => {
+    expect(formaterPoids(dixiemes)).toBe(attendu);
+  });
+
+  it('formate aussi des points négatifs', () => {
+    expect(formaterPoints(-5)).toBe('-0,05');
+    expect(formaterPoints(-100000)).toBe(`-1${NBSP}000,00`);
   });
 });
 

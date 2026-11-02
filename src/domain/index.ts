@@ -1,7 +1,14 @@
 /** API publique du domaine : l'interface et le stockage n'importent que ce fichier. */
 export type * from './types';
 export { ok, erreur, type Resultat } from './resultat';
-export { dossierVide, changerTitre, lireTotalPoints, changerTotalPoints } from './dossier';
+export {
+  TITRE_LONGUEUR_MAX,
+  TOTAL_POINTS_MAX,
+  dossierVide,
+  changerTitre,
+  lireTotalPoints,
+  changerTotalPoints,
+} from './dossier';
 export { POIDS_TOTAL, lirePoids, egaliserPoids, totalPoids, ponderationValide } from './poids';
 export {
   NIVEAUX_MIN,

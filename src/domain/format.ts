@@ -1,17 +1,18 @@
 /**
  * Format français des nombres, sans `Intl` : le résultat est identique sur tous les
  * navigateurs et dans tous les exports. Les valeurs reçues sont des entiers déjà arrondis
- * (dixièmes de pour cent, centièmes de point).
+ * (dixièmes de pour cent, centièmes de point), éventuellement négatifs (écart de pondération).
  */
 
 /** Espace insécable : sépare les milliers et précède « % ». */
-const NBSP = ' ';
+const NBSP = '\u00A0';
 
 /** Écrit `entier / 10^decimales` avec une virgule et les milliers séparés. */
 function decimal(entier: number, decimales: number): string {
-  const chiffres = String(entier).padStart(decimales + 1, '0');
+  const signe = entier < 0 ? '-' : '';
+  const chiffres = String(Math.abs(entier)).padStart(decimales + 1, '0');
   const partieEntiere = chiffres.slice(0, -decimales).replace(/\B(?=(\d{3})+$)/g, NBSP);
-  return `${partieEntiere},${chiffres.slice(-decimales)}`;
+  return `${signe}${partieEntiere},${chiffres.slice(-decimales)}`;
 }
 
 /** 167 → « 16,7 % » */

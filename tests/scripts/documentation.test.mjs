@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const RACINE = resolve(import.meta.dirname, '../..');
@@ -60,6 +60,10 @@ describe('README', () => {
   it('mentionne la licence et crédite Paulo Mendonça', () => {
     expect(readme).toMatch(/CC BY-NC-SA 4\.0/);
     expect(readme).toMatch(/Paulo Mendonça/);
+  });
+
+  it.each(readdirSync(resolve(RACINE, 'src')))('décrit le dossier src/%s/', (dossier) => {
+    expect(readme).toContain(`src/${dossier}/`);
   });
 
   it('explique le déploiement sur Vercel', () => {

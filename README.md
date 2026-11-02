@@ -3,9 +3,9 @@
 Application web pour créer des grilles d'évaluation critériées, évaluer chaque personne
 étudiante d'un groupe et exporter les résultats.
 
-**État : phase 1 (fondations).** La coquille de l'application est en place ; les
-fonctionnalités d'évaluation arrivent dans les phases suivantes (voir
-`docs/superpowers/specs/`).
+**État : phase 2 (domaine).** La coquille de l'application et le cœur métier (grille,
+groupe, calcul des notes, 25 modèles) sont en place. Le stockage, les écrans et les exports
+arrivent dans les phases suivantes (voir `docs/superpowers/specs/`).
 
 ## Principes
 
@@ -15,6 +15,24 @@ fonctionnalités d'évaluation arrivent dans les phases suivantes (voir
   `npm run check:neutralite`.
 - **Sobre et accessible.** Couleurs centralisées dans `src/ui/tokens.css`, contrastes
   WCAG AA vérifiés par les tests, scan axe sans violation sur chaque page.
+- **Fiable.** Le domaine est en TypeScript pur, couvert à 100 % par des tests écrits avant
+  le code.
+
+## Le domaine en bref
+
+- **Une seule grille pour tout le groupe** : chaque personne étudiante n'a que ses niveaux
+  et ses commentaires.
+- **Poids en dixièmes entiers** : 16,7 % est stocké `167`, 100 % vaut `1000`. Aucune erreur
+  d'arrondi ; « égaliser » donne toujours exactement 100 %.
+- **Note exacte** : Σ (niveau × poids) / (nombre de niveaux × Σ poids), calculée sur des
+  entiers et arrondie une seule fois, demi vers le haut (pourcentage au dixième, points au
+  centième).
+- **Pas de note trompeuse** : une évaluation est « incomplète » tant qu'un critère pondéré
+  n'est pas évalué, et aucune note n'est donnée si les poids ne totalisent pas 100 %.
+- **Opérations sûres** : chaque fonction renvoie un nouveau dossier sans modifier celui
+  reçu ; un refus renvoie un code d'erreur stable (`nom-en-double`, `poids-invalide`…).
+- **Format versionné** : chaque sauvegarde porte un numéro de version ; `migrer()` met à
+  jour les données anciennes et refuse celles d'une version future.
 
 ## Prérequis
 
@@ -51,9 +69,11 @@ npx playwright install chromium   # une seule fois, pour les tests de bout en bo
 
 ```
 app/            point d'entrée et table des routes (#/…)
+src/domain/     cœur métier en TypeScript pur (sans React ni navigateur), API dans index.ts
+src/data/       les 25 modèles de grilles de Paulo Mendonça
 src/ui/         interface : tokens, coquille (layout), pages
 scripts/        outils (garde de neutralité)
-tests/          tests Vitest (scripts, ui) et Playwright (e2e)
+tests/          tests Vitest (domain, data, scripts, ui) et Playwright (e2e)
 docs/superpowers/  specs et plans de chaque phase
 ```
 
