@@ -67,4 +67,5 @@ export type CodeErreur =
   | 'modele-introuvable'
   | 'version-inconnue'
   | 'pas-un-dossier'
+  | 'ecriture-impossible'
   | 'version-future';

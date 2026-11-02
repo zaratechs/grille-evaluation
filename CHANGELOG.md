@@ -60,4 +60,9 @@ Commits conventionnels.
 - Noms de fichiers sûrs pour les exports (`grille-travail-de-session-2026-11-02.json`) :
   sans accents ni caractères interdits, titre coupé à 60 caractères, date locale (pas UTC,
   qui donne le lendemain le soir).
+- Sauvegarde dans le navigateur : chargement migré et réparé, avec un avertissement pour
+  chaque cas (réparée, illisible, version future, stockage inaccessible) ; la sauvegarde
+  écartée ou réparée est gardée en copie de secours avant toute nouvelle écriture ;
+  écriture sans exception (quota, navigation privée) ; remise à zéro limitée aux clés de
+  l'application.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
