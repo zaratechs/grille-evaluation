@@ -68,4 +68,7 @@ export type CodeErreur =
   | 'version-inconnue'
   | 'pas-un-dossier'
   | 'ecriture-impossible'
+  | 'fichier-trop-gros'
+  | 'fichier-illisible'
+  | 'json-invalide'
   | 'version-future';

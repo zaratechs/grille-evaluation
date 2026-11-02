@@ -67,4 +67,8 @@ Commits conventionnels.
   l'application.
 - Détection des modifications du dossier faites dans un autre onglet, pour que l'onglet
   resté ouvert cesse d'enregistrer au lieu d'effacer ce travail.
+- Export JSON du dossier complet ou de la grille seule (sans les personnes étudiantes,
+  pour partager sans données personnelles). Import validé : migré, réparé avec bilan,
+  refusé sans rien modifier s'il dépasse 5 Mo ou n'est pas un dossier ; il remplace la
+  grille et le groupe et fusionne les modèles personnels (sans doublon au réimport).
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).

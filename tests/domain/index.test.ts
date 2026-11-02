@@ -38,6 +38,7 @@ describe('API publique du domaine', () => {
     'enregistrerModele',
     'renommerModele',
     'supprimerModele',
+    'fusionnerModeles',
     'migrer',
     'assainir',
     'bilanVide',

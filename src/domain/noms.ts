@@ -21,3 +21,20 @@ export const cleNom = (nom: string): string =>
     .toLowerCase()
     .replace(/\s+/g, ' ')
     .trim();
+
+/** Coupe un nom à `max` caractères, sans espace final. */
+export const couper = (nom: string, max: number): string => nom.slice(0, max).trimEnd();
+
+/**
+ * Ajoute « (2) », « (3) »… jusqu'à obtenir un nom dont la clé est absente de `vus`, puis
+ * réserve cette clé. Le suffixe reste sous la limite de longueur.
+ */
+export function nomUnique(nom: string, vus: Set<string>): string {
+  let candidat = nom;
+  for (let n = 2; vus.has(cleNom(candidat)); n++) {
+    const suffixe = ` (${n})`;
+    candidat = `${couper(nom, NOM_LONGUEUR_MAX - suffixe.length)}${suffixe}`;
+  }
+  vus.add(cleNom(candidat));
+  return candidat;
+}

@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   appliquerModele,
   enregistrerModele,
+  fusionnerModeles,
   renommerModele,
   supprimerModele,
 } from '../../src/domain/modeles';
@@ -134,5 +135,43 @@ describe('modèles personnels', () => {
     d.grille.criteres[0]?.descripteurs.push('x');
     expect(d.modelesPerso[0]?.niveaux).toHaveLength(5);
     expect(d.modelesPerso[0]?.criteres[0]?.descripteurs).toHaveLength(5);
+  });
+});
+
+describe('fusionnerModeles (import d’un fichier)', () => {
+  const m = (id: string, nom: string, poids = 1000): Modele => ({
+    id,
+    nom,
+    niveaux: ['A', 'B', 'C'],
+    criteres: [{ nom: 'Fond', poids, descripteurs: ['', '', ''] }],
+  });
+
+  it('garde les modèles existants et ajoute ceux du fichier', () => {
+    const r = fusionnerModeles([m('m1', 'Un')], [m('m2', 'Deux')], compteur());
+    expect(r).toEqual({ modeles: [m('m1', 'Un'), m('m2', 'Deux')], ajoutes: 1 });
+  });
+
+  it('ignore un modèle identique à un modèle existant (réimport de sa propre sauvegarde)', () => {
+    const r = fusionnerModeles([m('m1', 'Un')], [m('autre-id', 'un')], compteur());
+    expect(r).toEqual({ modeles: [m('m1', 'Un')], ajoutes: 0 });
+  });
+
+  it('suffixe un modèle de même nom mais de contenu différent', () => {
+    const r = fusionnerModeles([m('m1', 'Un')], [m('m2', 'Un', 0)], compteur());
+    expect(r.modeles.map((x) => x.nom)).toEqual(['Un', 'Un (2)']);
+    expect(r.ajoutes).toBe(1);
+  });
+
+  it('remplace un identifiant déjà pris', () => {
+    const r = fusionnerModeles([m('m1', 'Un')], [m('m1', 'Deux')], compteur());
+    expect(r.modeles.map((x) => x.id)).toEqual(['m1', 'n1']);
+  });
+
+  it('ne modifie pas les listes reçues', () => {
+    const existants = [m('m1', 'Un')];
+    const ajoutes = [m('m1', 'Un', 0)];
+    const copies = structuredClone([existants, ajoutes]);
+    fusionnerModeles(existants, ajoutes, compteur());
+    expect([existants, ajoutes]).toEqual(copies);
   });
 });

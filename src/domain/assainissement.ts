@@ -2,7 +2,7 @@ import { NOM_CRITERE_PAR_DEFAUT } from './criteres';
 import { TITRE_LONGUEUR_MAX, totalValide } from './dossier';
 import { estObjet } from './migrations';
 import { NIVEAUX_MAX, NIVEAUX_MIN, NIVEAUX_PAR_DEFAUT } from './niveaux';
-import { NOM_LONGUEUR_MAX, cleNom, lireNom } from './noms';
+import { NOM_LONGUEUR_MAX, couper, lireNom, nomUnique } from './noms';
 import { POIDS_TOTAL } from './poids';
 import { ok, erreur, type Resultat } from './resultat';
 import type { Critere, CritereModele, Dossier, Etudiant, Modele } from './types';
@@ -49,26 +49,12 @@ type Contexte = { bilan: BilanReparation; nouvelId: () => string };
 
 const estTexte = (v: unknown): v is string => typeof v === 'string';
 
-/** Coupe un nom à `max` caractères, sans espace final. */
-const couper = (nom: string, max: number): string => nom.slice(0, max).trimEnd();
-
 /** Nom utilisable (espaces retirés, tronqué), ou `null` s'il est vide ou absent. */
 function lireNomRepare(brut: unknown): string | null {
   if (!estTexte(brut)) return null;
   const lu = lireNom(brut);
   if (lu.ok) return lu.valeur;
   return lu.erreur === 'nom-vide' ? null : couper(brut.trim(), NOM_LONGUEUR_MAX);
-}
-
-/** Ajoute « (2) », « (3) »… jusqu'à obtenir un nom absent de `vus`, puis le réserve. */
-function nomUnique(nom: string, vus: Set<string>): string {
-  let candidat = nom;
-  for (let n = 2; vus.has(cleNom(candidat)); n++) {
-    const suffixe = ` (${n})`;
-    candidat = `${couper(nom, NOM_LONGUEUR_MAX - suffixe.length)}${suffixe}`;
-  }
-  vus.add(cleNom(candidat));
-  return candidat;
 }
 
 /** Nom réparé et rendu unique ; `null` s'il est inutilisable (l'élément est écarté). */

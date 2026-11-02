@@ -1,4 +1,4 @@
-import { cleNom, lireNom } from './noms';
+import { cleNom, lireNom, nomUnique } from './noms';
 import { ok, erreur, type Resultat } from './resultat';
 import type { Dossier, Modele } from './types';
 
@@ -65,4 +65,32 @@ export function renommerModele(dossier: Dossier, id: string, nom: string): Resul
 export function supprimerModele(dossier: Dossier, id: string): Resultat<Dossier> {
   if (!dossier.modelesPerso.some((m) => m.id === id)) return erreur('modele-introuvable');
   return ok({ ...dossier, modelesPerso: dossier.modelesPerso.filter((m) => m.id !== id) });
+}
+
+/** Deux modèles sont identiques s'ils ont le même nom (au sens de `cleNom`) et le même contenu. */
+const empreinte = (m: Modele): string => JSON.stringify([cleNom(m.nom), m.niveaux, m.criteres]);
+
+/**
+ * Ajoute à `existants` les modèles d'un fichier importé (décision 4 de la phase 3).
+ * Un modèle identique à un modèle existant est ignoré (réimport de sa propre sauvegarde) ;
+ * un nom déjà pris reçoit un suffixe ; un identifiant déjà pris est remplacé.
+ */
+export function fusionnerModeles(
+  existants: readonly Modele[],
+  ajoutes: readonly Modele[],
+  nouvelId: () => string,
+): { modeles: Modele[]; ajoutes: number } {
+  const empreintes = new Set(existants.map(empreinte));
+  const noms = new Set(existants.map((m) => cleNom(m.nom)));
+  const ids = new Set(existants.map((m) => m.id));
+  const modeles = [...existants];
+  for (const m of ajoutes) {
+    if (empreintes.has(empreinte(m))) continue;
+    const id = ids.has(m.id) ? nouvelId() : m.id;
+    ids.add(id);
+    const nouveau = { ...m, id, nom: nomUnique(m.nom, noms) };
+    empreintes.add(empreinte(nouveau));
+    modeles.push(nouveau);
+  }
+  return { modeles, ajoutes: modeles.length - existants.length };
 }

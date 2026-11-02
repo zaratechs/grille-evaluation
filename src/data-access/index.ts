@@ -11,3 +11,5 @@ export {
   type Chargement,
 } from './stockage';
 export { surveillerAutresOnglets } from './onglets';
+export { TAILLE_MAX_IMPORT, exporterJSON, importerJSON, type Import } from './portabilite';
+export { telecharger, lireFichier } from './fichiers';
