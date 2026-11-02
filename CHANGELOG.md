@@ -57,4 +57,7 @@ Commits conventionnels.
   noms en double suffixés « (2) », évaluations hors bornes ou d'un critère disparu
   écartées. Vérifié sur des données tirées au hasard : le résultat respecte toujours les
   règles du domaine, et réparer deux fois ne change plus rien.
+- Noms de fichiers sûrs pour les exports (`grille-travail-de-session-2026-11-02.json`) :
+  sans accents ni caractères interdits, titre coupé à 60 caractères, date locale (pas UTC,
+  qui donne le lendemain le soir).
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
