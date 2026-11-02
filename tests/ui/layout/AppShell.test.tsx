@@ -27,6 +27,12 @@ describe('AppShell', () => {
     expect(lien).toHaveAttribute('href', '/');
   });
 
+  it('l’en-tête porte la navigation entre les vues', () => {
+    monter();
+    const nav = within(screen.getByRole('banner')).getByRole('navigation', { name: 'Vues' });
+    expect(within(nav).getByRole('link', { name: 'Données' })).toHaveAttribute('href', '/donnees');
+  });
+
   it('rend la page enfant dans le contenu principal', () => {
     monter();
     expect(within(screen.getByRole('main')).getByText('contenu')).toBeInTheDocument();

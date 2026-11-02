@@ -80,4 +80,13 @@ Commits conventionnels.
   réparée ou illisible, un stockage refusé, une écriture impossible (retiré dès que
   l'écriture repasse) et une modification dans un autre onglet, qui met l'onglet en
   lecture seule.
+- Navigation entre quatre vues (Grille, Évaluation, Groupe, Données), encore vides, avec la
+  vue courante marquée ; `/` mène à la Grille. Chaque vue a son titre de document, et le
+  focus va sur son titre après une navigation. Les avis s'affichent sous l'en-tête, avec
+  leurs actions (télécharger l'originale, exporter, aller à Vos données, recharger) ; en
+  lecture seule, les champs de la vue sont désactivés.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
+
+### Retiré
+
+- La page d'accueil provisoire, remplacée par la vue Grille.
