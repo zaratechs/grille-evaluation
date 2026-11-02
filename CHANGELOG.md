@@ -24,4 +24,6 @@ Commits conventionnels.
   n'importe ni React ni le navigateur.
 - Poids des critères en dixièmes entiers (16,7 % = 167) : saisie avec virgule ou point,
   égalisation dont la somme fait toujours exactement 100 % (fin des `100.00000000000001`).
+- Format français des poids, pourcentages et points (« 16,7 % », « 17,50 », « 1 000,00 »),
+  avec espaces insécables, identique à l'écran et dans les exports.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
