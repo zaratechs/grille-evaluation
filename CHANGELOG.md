@@ -35,4 +35,8 @@ Commits conventionnels.
   présent est refusé, sans tenir compte des majuscules, des accents ni des espaces.
 - Évaluations : niveau par critère (de 1 à N), commentaire par critère, commentaire
   général, réinitialisation d'une personne.
+- Calcul des notes exact sur des entiers, arrondi une seule fois (demi vers le haut) :
+  pourcentage au dixième, points au centième, appréciation globale. Statuts « complète »,
+  « incomplète » (critère pondéré non évalué), « pondération invalide » (total ≠ 100 %) et
+  « vide ». Synthèse du groupe : moyenne et médiane des notes complètes.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
