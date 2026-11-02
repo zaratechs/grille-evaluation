@@ -6,36 +6,7 @@ import { ajouterEtudiant, evaluer } from '../../src/domain/groupe';
 import { NIVEAUX_PAR_DEFAUT } from '../../src/domain/niveaux';
 import type { Dossier } from '../../src/domain/types';
 import { valeur } from './outils/fabrique';
-
-const compteur = () => {
-  let i = 0;
-  return () => `n${++i}`;
-};
-
-const vides = (n = 5) => Array.from({ length: n }, () => '');
-
-/** Critère brut valide, dont on remplace certains champs. */
-const critereBrut = (champs: Record<string, unknown> = {}) => ({
-  id: 'a',
-  nom: 'Clarté',
-  poids: 1000,
-  descripteurs: vides(),
-  ...champs,
-});
-
-/** Dossier brut (tel que lu d'un fichier) dont on remplace certains champs de la grille. */
-const brut = (grille: Record<string, unknown> = {}) => ({
-  version: 1,
-  grille: {
-    titre: 'Session',
-    totalPoints: 20,
-    niveaux: [...NIVEAUX_PAR_DEFAUT],
-    criteres: [critereBrut()],
-    ...grille,
-  },
-  etudiants: [],
-  modelesPerso: [],
-});
+import { brut, compteur, critereBrut, vides } from './outils/bruts';
 
 /** Répare et renvoie le résultat ; fait échouer le test en cas de refus. */
 const reparer = (donnees: unknown) => valeur(assainir(donnees, compteur()));

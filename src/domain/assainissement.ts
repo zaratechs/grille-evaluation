@@ -2,27 +2,32 @@ import { NOM_CRITERE_PAR_DEFAUT } from './criteres';
 import { TITRE_LONGUEUR_MAX, totalValide } from './dossier';
 import { estObjet } from './migrations';
 import { NIVEAUX_MAX, NIVEAUX_MIN, NIVEAUX_PAR_DEFAUT } from './niveaux';
-import { NOM_LONGUEUR_MAX, lireNom } from './noms';
+import { NOM_LONGUEUR_MAX, cleNom, lireNom } from './noms';
 import { POIDS_TOTAL } from './poids';
 import { ok, erreur, type Resultat } from './resultat';
-import type { Critere, Dossier, Etudiant, Modele } from './types';
+import type { Critere, CritereModele, Dossier, Etudiant, Modele } from './types';
 
 /**
  * Réparation d'un dossier lu d'une sauvegarde ou d'un fichier, déjà passé par `migrer`.
  * Voir la spec de la phase 3, section 4. Ne lève jamais : tout ce qui peut être corrigé
  * l'est, et chaque correction est comptée dans le bilan. Seule une donnée qui n'est pas
- * du tout un dossier est refusée.
+ * du tout un dossier est refusée. Réparer un dossier déjà réparé ne change plus rien.
  */
 
 export type BilanReparation = {
-  /** Titre, total de points ou liste de critères illisibles. */
+  /** Titre, total de points, ou liste (critères, groupe, modèles) illisibles. */
   parametresCorriges: number;
   niveauxCorriges: number;
   criteresEcartes: number;
   identifiantsRemplaces: number;
+  /** Noms vides, tronqués, aux espaces retirés ou suffixés car en double. */
   nomsCorriges: number;
   poidsCorriges: number;
   descripteursCorriges: number;
+  personnesEcartees: number;
+  /** Niveaux évalués et commentaires écartés (hors bornes, critère disparu, non textuels). */
+  evaluationsEcartees: number;
+  modelesEcartes: number;
 };
 
 export type Reparation = { dossier: Dossier; modifie: boolean; bilan: BilanReparation };
@@ -35,126 +40,231 @@ export const bilanVide = (): BilanReparation => ({
   nomsCorriges: 0,
   poidsCorriges: 0,
   descripteursCorriges: 0,
+  personnesEcartees: 0,
+  evaluationsEcartees: 0,
+  modelesEcartes: 0,
 });
+
+type Contexte = { bilan: BilanReparation; nouvelId: () => string };
 
 const estTexte = (v: unknown): v is string => typeof v === 'string';
 
-/** Nom valide : espaces retirés ; vide ou absent → `parDefaut` ; trop long → tronqué. */
-function reparerNom(brut: unknown, parDefaut: string): string {
-  if (!estTexte(brut)) return parDefaut;
+/** Coupe un nom à `max` caractères, sans espace final. */
+const couper = (nom: string, max: number): string => nom.slice(0, max).trimEnd();
+
+/** Nom utilisable (espaces retirés, tronqué), ou `null` s'il est vide ou absent. */
+function lireNomRepare(brut: unknown): string | null {
+  if (!estTexte(brut)) return null;
   const lu = lireNom(brut);
   if (lu.ok) return lu.valeur;
-  return lu.erreur === 'nom-vide' ? parDefaut : brut.trim().slice(0, NOM_LONGUEUR_MAX).trim();
+  return lu.erreur === 'nom-vide' ? null : couper(brut.trim(), NOM_LONGUEUR_MAX);
+}
+
+/** Ajoute « (2) », « (3) »… jusqu'à obtenir un nom absent de `vus`, puis le réserve. */
+function nomUnique(nom: string, vus: Set<string>): string {
+  let candidat = nom;
+  for (let n = 2; vus.has(cleNom(candidat)); n++) {
+    const suffixe = ` (${n})`;
+    candidat = `${couper(nom, NOM_LONGUEUR_MAX - suffixe.length)}${suffixe}`;
+  }
+  vus.add(cleNom(candidat));
+  return candidat;
+}
+
+/** Nom réparé et rendu unique ; `null` s'il est inutilisable (l'élément est écarté). */
+function reparerNomUnique(brut: unknown, vus: Set<string>, ctx: Contexte): string | null {
+  const lu = lireNomRepare(brut);
+  if (lu === null) return null;
+  const nom = nomUnique(lu, vus);
+  if (nom !== brut) ctx.bilan.nomsCorriges += 1;
+  return nom;
 }
 
 /** Identifiant gardé s'il est un texte non vide encore inutilisé ; sinon, nouveau. */
-function reparerId(
-  brut: unknown,
-  vus: Set<string>,
-  nouvelId: () => string,
-  bilan: BilanReparation,
-): string {
+function reparerId(brut: unknown, vus: Set<string>, ctx: Contexte): string {
   let id: string;
   if (estTexte(brut) && brut !== '' && !vus.has(brut)) {
     id = brut;
   } else {
-    id = nouvelId();
-    bilan.identifiantsRemplaces += 1;
+    id = ctx.nouvelId();
+    ctx.bilan.identifiantsRemplaces += 1;
   }
   vus.add(id);
   return id;
 }
 
-function reparerNiveaux(brut: unknown, bilan: BilanReparation): string[] {
+/** Liste brute, ou liste vide (comptée) si ce n'en est pas une. */
+function liste(brut: unknown, ctx: Contexte): unknown[] {
+  if (Array.isArray(brut)) return brut;
+  ctx.bilan.parametresCorriges += 1;
+  return [];
+}
+
+/** Garde les objets d'une liste et compte ceux qui n'en sont pas. */
+function objets(
+  brut: unknown,
+  ctx: Contexte,
+  ecarte: keyof BilanReparation,
+): Record<string, unknown>[] {
+  const garde: Record<string, unknown>[] = [];
+  for (const element of liste(brut, ctx)) {
+    if (estObjet(element)) garde.push(element);
+    else ctx.bilan[ecarte] += 1;
+  }
+  return garde;
+}
+
+function reparerNiveaux(brut: unknown, ctx: Contexte): string[] {
   const valide =
     Array.isArray(brut) &&
     brut.length >= NIVEAUX_MIN &&
     brut.length <= NIVEAUX_MAX &&
     brut.every(estTexte);
   if (!valide) {
-    bilan.niveauxCorriges += 1;
+    ctx.bilan.niveauxCorriges += 1;
     return [...NIVEAUX_PAR_DEFAUT];
   }
   return brut.map((libelle, i) => {
-    const repare = reparerNom(libelle, `Niveau ${i + 1}`);
-    if (repare !== libelle) bilan.niveauxCorriges += 1;
+    const repare = lireNomRepare(libelle) ?? `Niveau ${i + 1}`;
+    if (repare !== libelle) ctx.bilan.niveauxCorriges += 1;
     return repare;
   });
 }
 
-function reparerDescripteurs(brut: unknown, nbNiveaux: number, bilan: BilanReparation) {
-  const liste: unknown[] = Array.isArray(brut) ? brut : [];
-  const descripteurs = Array.from({ length: nbNiveaux }, (_, i) => {
-    const d = liste[i];
+function reparerDescripteurs(brut: unknown, nbNiveaux: number, ctx: Contexte): string[] {
+  const source: unknown[] = Array.isArray(brut) ? brut : [];
+  const intacts = Array.isArray(brut) && brut.length === nbNiveaux && brut.every(estTexte);
+  if (!intacts) ctx.bilan.descripteursCorriges += 1;
+  return Array.from({ length: nbNiveaux }, (_, i) => {
+    const d = source[i];
     return estTexte(d) ? d : '';
   });
-  const intacts = Array.isArray(brut) && brut.length === nbNiveaux && brut.every(estTexte);
-  if (!intacts) bilan.descripteursCorriges += 1;
-  return descripteurs;
 }
 
-function reparerCriteres(
-  brut: unknown,
+/** Nom, poids et descripteurs d'un critère (de grille ou de modèle). */
+function reparerContenuCritere(
+  c: Record<string, unknown>,
   nbNiveaux: number,
-  nouvelId: () => string,
-  bilan: BilanReparation,
-): Critere[] {
-  if (!Array.isArray(brut)) {
-    bilan.parametresCorriges += 1;
-    return [];
-  }
+  ctx: Contexte,
+): CritereModele {
+  const nom = lireNomRepare(c.nom) ?? NOM_CRITERE_PAR_DEFAUT;
+  if (nom !== c.nom) ctx.bilan.nomsCorriges += 1;
+  const poids =
+    typeof c.poids === 'number' &&
+    Number.isInteger(c.poids) &&
+    c.poids >= 0 &&
+    c.poids <= POIDS_TOTAL
+      ? c.poids
+      : null;
+  if (poids === null) ctx.bilan.poidsCorriges += 1;
+  return {
+    nom,
+    poids: poids ?? 0,
+    descripteurs: reparerDescripteurs(c.descripteurs, nbNiveaux, ctx),
+  };
+}
+
+function reparerCriteres(brut: unknown, nbNiveaux: number, ctx: Contexte): Critere[] {
   const vus = new Set<string>();
-  const criteres: Critere[] = [];
-  for (const c of brut) {
-    if (!estObjet(c)) {
-      bilan.criteresEcartes += 1;
+  return objets(brut, ctx, 'criteresEcartes').map((c) => ({
+    id: reparerId(c.id, vus, ctx),
+    ...reparerContenuCritere(c, nbNiveaux, ctx),
+  }));
+}
+
+/** Garde les entrées valides d'un enregistrement « id du critère → valeur ». */
+function reparerParCritere<T>(
+  brut: unknown,
+  garder: (cle: string, valeur: unknown) => valeur is T,
+  ctx: Contexte,
+): Record<string, T> {
+  if (!estObjet(brut)) {
+    ctx.bilan.evaluationsEcartees += 1;
+    return {};
+  }
+  const garde: Record<string, T> = {};
+  for (const [cle, valeur] of Object.entries(brut)) {
+    if (garder(cle, valeur)) garde[cle] = valeur;
+    else ctx.bilan.evaluationsEcartees += 1;
+  }
+  return garde;
+}
+
+function reparerEtudiants(brut: unknown, grille: Dossier['grille'], ctx: Contexte): Etudiant[] {
+  const ids = new Set(grille.criteres.map((c) => c.id));
+  const n = grille.niveaux.length;
+  const niveauValide = (cle: string, v: unknown): v is number =>
+    ids.has(cle) && typeof v === 'number' && Number.isInteger(v) && v >= 1 && v <= n;
+  const commentaireValide = (cle: string, v: unknown): v is string =>
+    ids.has(cle) && estTexte(v) && v !== '';
+
+  const idsVus = new Set<string>();
+  const nomsVus = new Set<string>();
+  const etudiants: Etudiant[] = [];
+  for (const e of objets(brut, ctx, 'personnesEcartees')) {
+    const nom = reparerNomUnique(e.nom, nomsVus, ctx);
+    if (nom === null) {
+      ctx.bilan.personnesEcartees += 1;
       continue;
     }
-    const nom = reparerNom(c.nom, NOM_CRITERE_PAR_DEFAUT);
-    if (nom !== c.nom) bilan.nomsCorriges += 1;
-    const poids =
-      typeof c.poids === 'number' &&
-      Number.isInteger(c.poids) &&
-      c.poids >= 0 &&
-      c.poids <= POIDS_TOTAL
-        ? c.poids
-        : null;
-    if (poids === null) bilan.poidsCorriges += 1;
-    criteres.push({
-      id: reparerId(c.id, vus, nouvelId, bilan),
+    if (!estTexte(e.commentaireGeneral)) ctx.bilan.evaluationsEcartees += 1;
+    etudiants.push({
+      id: reparerId(e.id, idsVus, ctx),
       nom,
-      poids: poids ?? 0,
-      descripteurs: reparerDescripteurs(c.descripteurs, nbNiveaux, bilan),
+      niveaux: reparerParCritere(e.niveaux, niveauValide, ctx),
+      commentaires: reparerParCritere(e.commentaires, commentaireValide, ctx),
+      commentaireGeneral: estTexte(e.commentaireGeneral) ? e.commentaireGeneral : '',
     });
   }
-  return criteres;
+  return etudiants;
+}
+
+function reparerModeles(brut: unknown, ctx: Contexte): Modele[] {
+  const idsVus = new Set<string>();
+  const nomsVus = new Set<string>();
+  const modeles: Modele[] = [];
+  for (const m of objets(brut, ctx, 'modelesEcartes')) {
+    const nom = reparerNomUnique(m.nom, nomsVus, ctx);
+    if (nom === null) {
+      ctx.bilan.modelesEcartes += 1;
+      continue;
+    }
+    const id = reparerId(m.id, idsVus, ctx);
+    const niveaux = reparerNiveaux(m.niveaux, ctx);
+    const criteres = objets(m.criteres, ctx, 'criteresEcartes').map((c) =>
+      reparerContenuCritere(c, niveaux.length, ctx),
+    );
+    modeles.push({ id, nom, niveaux, criteres });
+  }
+  return modeles;
 }
 
 export function assainir(donnees: unknown, nouvelId: () => string): Resultat<Reparation> {
   if (!estObjet(donnees) || !estObjet(donnees.grille)) return erreur('pas-un-dossier');
-  const bilan = bilanVide();
+  const ctx: Contexte = { bilan: bilanVide(), nouvelId };
   const g = donnees.grille;
 
   let titre = estTexte(g.titre) ? g.titre : '';
   if (titre.length > TITRE_LONGUEUR_MAX) titre = titre.slice(0, TITRE_LONGUEUR_MAX);
-  if (titre !== g.titre) bilan.parametresCorriges += 1;
+  if (titre !== g.titre) ctx.bilan.parametresCorriges += 1;
 
   const totalPoints =
     typeof g.totalPoints === 'number' && totalValide(g.totalPoints) ? g.totalPoints : null;
-  if (totalPoints === null) bilan.parametresCorriges += 1;
+  if (totalPoints === null) ctx.bilan.parametresCorriges += 1;
 
-  const niveaux = reparerNiveaux(g.niveaux, bilan);
+  const niveaux = reparerNiveaux(g.niveaux, ctx);
+  const grille: Dossier['grille'] = {
+    titre,
+    totalPoints: totalPoints ?? 100,
+    niveaux,
+    criteres: reparerCriteres(g.criteres, niveaux.length, ctx),
+  };
   const dossier: Dossier = {
     version: 1,
-    grille: {
-      titre,
-      totalPoints: totalPoints ?? 100,
-      niveaux,
-      criteres: reparerCriteres(g.criteres, niveaux.length, nouvelId, bilan),
-    },
-    // Réparés à la tâche 3 du plan de la phase 3.
-    etudiants: donnees.etudiants as Etudiant[],
-    modelesPerso: donnees.modelesPerso as Modele[],
+    grille,
+    etudiants: reparerEtudiants(donnees.etudiants, grille, ctx),
+    modelesPerso: reparerModeles(donnees.modelesPerso, ctx),
   };
-  return ok({ dossier, modifie: Object.values(bilan).some((n) => n > 0), bilan });
+  const modifie = Object.values(ctx.bilan).some((n) => n > 0);
+  return ok({ dossier, modifie, bilan: ctx.bilan });
 }

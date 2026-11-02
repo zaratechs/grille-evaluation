@@ -53,4 +53,8 @@ Commits conventionnels.
 - Réparation d'une sauvegarde abîmée, partie grille : titre, total de points, niveaux et
   critères (identifiants, noms, poids, descripteurs) sont corrigés champ par champ, chaque
   correction comptée dans un bilan ; une sauvegarde intacte ressort identique.
+- Réparation, partie groupe et modèles personnels : personnes et modèles sans nom écartés,
+  noms en double suffixés « (2) », évaluations hors bornes ou d'un critère disparu
+  écartées. Vérifié sur des données tirées au hasard : le résultat respecte toujours les
+  règles du domaine, et réparer deux fois ne change plus rien.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
