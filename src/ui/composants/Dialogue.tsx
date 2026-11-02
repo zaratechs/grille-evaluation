@@ -1,5 +1,6 @@
-import { useEffect, useId, useRef, type ReactNode } from 'react';
+import { useId, useRef, type ReactNode } from 'react';
 import { Bouton, type Variante } from './Bouton';
+import { useModale } from './useModale';
 
 type Props = {
   ouvert: boolean;
@@ -26,38 +27,16 @@ export function Dialogue({
   surAnnuler,
   children,
 }: Props) {
-  const fenetre = useRef<HTMLDialogElement>(null);
   const annuler = useRef<HTMLButtonElement>(null);
+  const modale = useModale(ouvert, annuler, surAnnuler);
   const id = useId();
-
-  useEffect(() => {
-    const dialogue = fenetre.current;
-    if (!ouvert || !dialogue) return;
-    const origine = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    dialogue.showModal();
-    annuler.current?.focus();
-    return () => {
-      dialogue.close();
-      origine?.focus();
-    };
-  }, [ouvert]);
 
   if (!ouvert) return null;
   return (
     <dialog
-      ref={fenetre}
+      {...modale}
       aria-labelledby={`${id}-titre`}
       aria-describedby={`${id}-texte`}
-      // Échap : on garde la main pour que l'état React décide de la fermeture.
-      onCancel={(e) => {
-        e.preventDefault();
-        surAnnuler();
-      }}
-      onKeyDown={(e) => {
-        if (e.key !== 'Escape') return;
-        e.preventDefault();
-        surAnnuler();
-      }}
       className="m-auto w-full max-w-md rounded-carte border border-bordure bg-surface p-5 text-texte backdrop:bg-texte/40"
     >
       <h2 id={`${id}-titre`} className="text-lg font-semibold">

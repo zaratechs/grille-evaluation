@@ -96,6 +96,12 @@ Commits conventionnels.
   poids » répartit 100 % entre les critères (`egaliserCriteres`, ajoutée au domaine).
   Retirer un critère déjà utilisé demande une confirmation qui dit combien d'évaluations,
   de commentaires et de descripteurs seront effacés.
+- Modèles : « Partir d'un modèle… » ouvre une fenêtre avec les 25 modèles fournis (crédités)
+  et les modèles personnels, une recherche qui ignore accents et majuscules, et un aperçu
+  (niveaux, critères, poids). Appliquer un modèle à une grille déjà remplie demande une
+  confirmation qui dit ce qui sera remplacé et effacé. « Enregistrer comme modèle… »,
+  renommer et supprimer (avec confirmation) un modèle personnel. Fenêtre modale
+  générique ; Échap dans une confirmation ouverte par-dessus ne ferme qu'elle.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Retiré

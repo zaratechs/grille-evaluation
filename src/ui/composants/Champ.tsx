@@ -12,6 +12,8 @@ type Props = {
   desactive?: boolean;
   /** Pour les nombres : « decimal » ou « numeric » montre le bon clavier sur téléphone. */
   modeSaisie?: 'text' | 'decimal' | 'numeric';
+  /** « search » pour un champ de recherche (rôle `searchbox`). */
+  type?: 'text' | 'search';
   className?: string;
   /** Pour donner le focus au champ (une seule ligne seulement). */
   refChamp?: Ref<HTMLInputElement>;
@@ -31,6 +33,7 @@ export function Champ({
   multiligne = false,
   desactive = false,
   modeSaisie = 'text',
+  type = 'text',
   className = '',
   refChamp,
 }: Props) {
@@ -58,7 +61,7 @@ export function Champ({
         <input
           {...commun}
           ref={refChamp}
-          type="text"
+          type={type}
           inputMode={modeSaisie}
           onChange={(e) => surSaisie(e.target.value)}
         />

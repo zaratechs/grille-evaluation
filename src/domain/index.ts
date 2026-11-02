@@ -18,7 +18,7 @@ export {
   retirerNiveau,
   renommerNiveau,
 } from './niveaux';
-export { NOM_LONGUEUR_MAX } from './noms';
+export { NOM_LONGUEUR_MAX, cleNom } from './noms';
 export type { Sens } from './listes';
 export {
   ajouterCritere,
