@@ -18,7 +18,7 @@ fonctionnalités d'évaluation arrivent dans les phases suivantes (voir
 
 ## Prérequis
 
-- Node.js 20 ou plus récent (`.nvmrc`). La CI utilise Node.js 22.
+- Node.js 22.12 ou plus récent (`.nvmrc` : 22, la version utilisée par la CI).
 
 ## Installation
 

@@ -32,6 +32,18 @@ describe('package.json', () => {
   });
 });
 
+describe('Version de Node', () => {
+  const minimum = Number(/\d+/.exec(pkg.engines.node)?.[0]);
+
+  it('exige au moins Node 22 (Node 20 n’est plus maintenu)', () => {
+    expect(minimum).toBeGreaterThanOrEqual(22);
+  });
+
+  it('.nvmrc correspond au minimum de package.json', () => {
+    expect(lire('.nvmrc').trim()).toBe(String(minimum));
+  });
+});
+
 describe('README', () => {
   const readme = lire('README.md');
 

@@ -7,8 +7,9 @@ Commits conventionnels.
 
 ### Ajouté
 
-- Outillage : Vite, React 19, TypeScript strict (`noUncheckedIndexedAccess`,
-  `exactOptionalPropertyTypes`), Tailwind 4, ESLint (dont jsx-a11y) et Prettier.
+- Outillage : Node.js 22.12 minimum, Vite, React 19, TypeScript strict
+  (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`), Tailwind 4, ESLint (dont
+  jsx-a11y) et Prettier.
 - Garde de neutralité (`npm run check:neutralite`) : bloque les noms d'établissements et
   toute adresse courriel dans les fichiers livrés.
 - Couleurs centralisées dans `src/ui/tokens.css`, avec contrastes WCAG AA calculés par
