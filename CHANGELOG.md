@@ -65,4 +65,6 @@ Commits conventionnels.
   écartée ou réparée est gardée en copie de secours avant toute nouvelle écriture ;
   écriture sans exception (quota, navigation privée) ; remise à zéro limitée aux clés de
   l'application.
+- Détection des modifications du dossier faites dans un autre onglet, pour que l'onglet
+  resté ouvert cesse d'enregistrer au lieu d'effacer ce travail.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).

@@ -10,3 +10,4 @@ export {
   type Avertissement,
   type Chargement,
 } from './stockage';
+export { surveillerAutresOnglets } from './onglets';
