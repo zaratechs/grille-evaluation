@@ -39,6 +39,8 @@ describe('API publique du domaine', () => {
     'renommerModele',
     'supprimerModele',
     'migrer',
+    'assainir',
+    'bilanVide',
   ])('exporte %s', (nom) => {
     expect(typeof (domaine as Record<string, unknown>)[nom]).toBe('function');
   });

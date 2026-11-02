@@ -16,7 +16,7 @@ export const MIGRATIONS: readonly Migration[] = [];
 
 export const VERSION_COURANTE = 1;
 
-const estObjet = (v: unknown): v is Donnees =>
+export const estObjet = (v: unknown): v is Donnees =>
   typeof v === 'object' && v !== null && !Array.isArray(v);
 
 /**

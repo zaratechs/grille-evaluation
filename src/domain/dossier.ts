@@ -20,7 +20,7 @@ export function changerTitre(dossier: Dossier, titre: string): Resultat<Dossier>
 }
 
 /** De 0,01 à 1000, au plus 2 décimales. */
-const totalValide = (total: number): boolean =>
+export const totalValide = (total: number): boolean =>
   Number.isFinite(total) &&
   total >= 0.01 &&
   total <= TOTAL_POINTS_MAX &&

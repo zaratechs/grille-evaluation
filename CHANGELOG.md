@@ -50,4 +50,7 @@ Commits conventionnels.
 - Accès aux données (`src/data-access/`) : seul dossier autorisé à toucher au stockage et
   aux fichiers du navigateur (vérifié par un test), couvert à 100 % ; identifiants uniques
   avec repli quand `crypto.randomUUID` n'existe pas.
+- Réparation d'une sauvegarde abîmée, partie grille : titre, total de points, niveaux et
+  critères (identifiants, noms, poids, descripteurs) sont corrigés champ par champ, chaque
+  correction comptée dans un bilan ; une sauvegarde intacte ressort identique.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).

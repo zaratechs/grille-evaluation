@@ -66,4 +66,5 @@ export type CodeErreur =
   | 'identifiant-en-double'
   | 'modele-introuvable'
   | 'version-inconnue'
+  | 'pas-un-dossier'
   | 'version-future';

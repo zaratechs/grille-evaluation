@@ -48,3 +48,4 @@ export {
 export { formaterPoids, formaterPourcentage, formaterPoints } from './format';
 export { appliquerModele, enregistrerModele, renommerModele, supprimerModele } from './modeles';
 export { VERSION_COURANTE, MIGRATIONS, migrer, type Migration, type Donnees } from './migrations';
+export { assainir, bilanVide, type BilanReparation, type Reparation } from './assainissement';
