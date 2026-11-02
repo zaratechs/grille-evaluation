@@ -21,6 +21,7 @@ describe('API publique du domaine', () => {
     'modifierDescripteur',
     'deplacerCritere',
     'retirerCritere',
+    'egaliserCriteres',
     'ajouterEtudiant',
     'renommerEtudiant',
     'retirerEtudiant',

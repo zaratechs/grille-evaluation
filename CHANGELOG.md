@@ -90,6 +90,12 @@ Commits conventionnels.
   affichée quand un bouton est désactivé. Retirer un niveau déjà utilisé demande une
   confirmation qui dit combien d'évaluations et de descripteurs seront effacés. Un texte
   refusé reste dans son champ, avec son message, sans être enregistré.
+- Vue Grille, deuxième partie : une carte par critère (nom, poids en pourcentage avec la
+  virgule ou le point, un descripteur par niveau), monter, descendre et retirer. Le total
+  des poids est annoncé en direct (« 100,0 % ✓ », « il manque 5,0 % »). « Égaliser les
+  poids » répartit 100 % entre les critères (`egaliserCriteres`, ajoutée au domaine).
+  Retirer un critère déjà utilisé demande une confirmation qui dit combien d'évaluations,
+  de commentaires et de descripteurs seront effacés.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Retiré

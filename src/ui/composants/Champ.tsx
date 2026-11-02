@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useId, type Ref } from 'react';
 
 type Props = {
   etiquette: string;
@@ -13,6 +13,8 @@ type Props = {
   /** Pour les nombres : « decimal » ou « numeric » montre le bon clavier sur téléphone. */
   modeSaisie?: 'text' | 'decimal' | 'numeric';
   className?: string;
+  /** Pour donner le focus au champ (une seule ligne seulement). */
+  refChamp?: Ref<HTMLInputElement>;
 };
 
 const STYLE_CHAMP =
@@ -30,6 +32,7 @@ export function Champ({
   desactive = false,
   modeSaisie = 'text',
   className = '',
+  refChamp,
 }: Props) {
   const id = useId();
   const idAide = `${id}-aide`;
@@ -54,6 +57,7 @@ export function Champ({
       ) : (
         <input
           {...commun}
+          ref={refChamp}
           type="text"
           inputMode={modeSaisie}
           onChange={(e) => surSaisie(e.target.value)}

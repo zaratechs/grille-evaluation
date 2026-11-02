@@ -3,6 +3,7 @@ import {
   ajouterCritere,
   changerPoids,
   deplacerCritere,
+  egaliserCriteres,
   modifierDescripteur,
   renommerCritere,
   retirerCritere,
@@ -124,5 +125,24 @@ describe('immuabilité', () => {
     deplacerCritere(d, 'b', 'haut');
     retirerCritere(d, 'a');
     expect(d).toEqual(copie);
+  });
+});
+
+describe('egaliserCriteres', () => {
+  it('répartit 100 % également, le reste aux premiers critères', () => {
+    const d = valeur(egaliserCriteres(trois()));
+    expect(d.grille.criteres.map((c) => c.poids)).toEqual([334, 333, 333]);
+  });
+
+  it('ne touche à rien d’autre et ne modifie pas le dossier reçu', () => {
+    const avant = trois();
+    const copie = structuredClone(avant);
+    const d = valeur(egaliserCriteres(avant));
+    expect(avant).toEqual(copie);
+    expect(d.grille.criteres.map((c) => c.nom)).toEqual(avant.grille.criteres.map((c) => c.nom));
+  });
+
+  it('sans critère : rien à égaliser, dossier rendu tel quel', () => {
+    expect(valeur(egaliserCriteres(dossierVide()))).toEqual(dossierVide());
   });
 });

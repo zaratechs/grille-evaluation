@@ -133,3 +133,122 @@ describe('Grille : niveaux', () => {
     expect(enregistre().etudiants[0]?.niveaux).toEqual({});
   });
 });
+
+describe('Grille : critères', () => {
+  const carte = (n: number) => screen.getByRole('group', { name: new RegExp(`^Critère ${n}`) });
+  const cartes = () => screen.queryAllByRole('group', { name: /^Critère \d/ });
+  const total = () => screen.getByRole('status', { name: 'Total des poids' });
+
+  /** Deux critères (60 % et 40 %), une personne évaluée et commentée sur le premier. */
+  function deux(): Dossier {
+    const d = dossierA(5, false);
+    d.grille.criteres = [
+      { id: 'c1', nom: 'Fond', poids: 600, descripteurs: ['Rien.', '', '', '', ''] },
+      { id: 'c2', nom: 'Forme', poids: 400, descripteurs: ['', '', '', '', ''] },
+    ];
+    d.etudiants[0] = { ...d.etudiants[0]!, niveaux: { c1: 3 }, commentaires: { c1: 'Bien.' } };
+    return d;
+  }
+
+  it('sans critère : une invitation à en ajouter un', () => {
+    monterApp('/grille');
+    expect(cartes()).toHaveLength(0);
+    expect(screen.getByText(/Aucun critère/)).toBeInTheDocument();
+  });
+
+  it('ajouter un critère : une carte apparaît, le focus va sur son nom', async () => {
+    const { user } = monterApp('/grille');
+    await user.click(bouton('Ajouter un critère'));
+    expect(cartes()).toHaveLength(1);
+    const nom = within(carte(1)).getByRole('textbox', { name: 'Nom' });
+    expect(nom).toHaveValue('Nouveau critère');
+    expect(nom).toHaveFocus();
+    expect(enregistre().grille.criteres).toHaveLength(1);
+  });
+
+  it('renommer ; un nom vide est refusé avec son message', async () => {
+    const { user } = monterApp('/grille', deux());
+    const nom = within(carte(2)).getByRole('textbox', { name: 'Nom' });
+    await user.clear(nom);
+    expect(nom).toHaveAccessibleDescription(/vide/);
+    await user.type(nom, 'Présentation');
+    expect(enregistre().grille.criteres[1]?.nom).toBe('Présentation');
+    expect(carte(2)).toHaveAccessibleName('Critère 2 : Présentation');
+  });
+
+  it('poids : virgule ou point acceptés, texte refusé avec son message', async () => {
+    const { user } = monterApp('/grille', deux());
+    const poids = within(carte(1)).getByRole('textbox', { name: 'Poids (%)' });
+    expect(poids).toHaveValue('60,0');
+    await user.clear(poids);
+    await user.type(poids, '16,7');
+    expect(enregistre().grille.criteres[0]?.poids).toBe(167);
+    await user.clear(poids);
+    await user.type(poids, '33.3');
+    expect(enregistre().grille.criteres[0]?.poids).toBe(333);
+    await user.clear(poids);
+    await user.type(poids, 'beaucoup');
+    expect(poids).toHaveAccessibleDescription(/0 à 100/);
+    expect(enregistre().grille.criteres[0]?.poids).toBe(333);
+  });
+
+  it('le total des poids est annoncé en direct, en texte', async () => {
+    const { user } = monterApp('/grille', deux());
+    expect(total()).toHaveTextContent(/100,0\s%\s✓/);
+    const poids = within(carte(2)).getByRole('textbox', { name: 'Poids (%)' });
+    await user.clear(poids);
+    await user.type(poids, '35');
+    expect(total()).toHaveTextContent(/95,0\s% — il manque 5,0\s%/);
+    await user.clear(poids);
+    await user.type(poids, '50');
+    expect(total()).toHaveTextContent(/110,0\s% — 10,0\s% de trop/);
+  });
+
+  it('« Égaliser » répartit 100 % entre les critères', async () => {
+    const d = deux();
+    d.grille.criteres.push({ id: 'c3', nom: 'Oral', poids: 0, descripteurs: ['', '', '', '', ''] });
+    const { user } = monterApp('/grille', d);
+    await user.click(bouton('Égaliser les poids'));
+    expect(enregistre().grille.criteres.map((c) => c.poids)).toEqual([334, 333, 333]);
+    expect(within(carte(1)).getByRole('textbox', { name: 'Poids (%)' })).toHaveValue('33,4');
+  });
+
+  it('un champ de descripteur par niveau, nommé d’après le niveau', async () => {
+    const { user } = monterApp('/grille', deux());
+    const champs = within(carte(2)).getAllByRole('textbox', { name: /^Descripteur/ });
+    expect(champs).toHaveLength(5);
+    const excellent = within(carte(2)).getByRole('textbox', {
+      name: 'Descripteur du niveau 5 (Niveau 5)',
+    });
+    await user.type(excellent, 'Soigné.');
+    expect(enregistre().grille.criteres[1]?.descripteurs[4]).toBe('Soigné.');
+  });
+
+  it('monter et descendre ; désactivés aux bouts', async () => {
+    const { user } = monterApp('/grille', deux());
+    expect(within(carte(1)).getByRole('button', { name: 'Monter' })).toBeDisabled();
+    expect(within(carte(2)).getByRole('button', { name: 'Descendre' })).toBeDisabled();
+    await user.click(within(carte(2)).getByRole('button', { name: 'Monter' }));
+    expect(enregistre().grille.criteres.map((c) => c.id)).toEqual(['c2', 'c1']);
+    expect(carte(1)).toHaveAccessibleName('Critère 1 : Forme');
+  });
+
+  it('retirer un critère vierge se fait sans confirmation', async () => {
+    const { user } = monterApp('/grille', deux());
+    await user.click(within(carte(2)).getByRole('button', { name: 'Retirer' }));
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(enregistre().grille.criteres.map((c) => c.id)).toEqual(['c1']);
+  });
+
+  it('retirer un critère utilisé demande confirmation, en disant ce qui sera effacé', async () => {
+    const { user } = monterApp('/grille', deux());
+    await user.click(within(carte(1)).getByRole('button', { name: 'Retirer' }));
+    const fenetre = screen.getByRole('dialog', { name: 'Retirer le critère « Fond » ?' });
+    expect(fenetre).toHaveTextContent('1 évaluation sera effacée.');
+    expect(fenetre).toHaveTextContent('1 commentaire sera effacé.');
+    expect(fenetre).toHaveTextContent('1 descripteur sera effacé.');
+    await user.click(within(fenetre).getByRole('button', { name: 'Retirer le critère' }));
+    expect(enregistre().grille.criteres.map((c) => c.id)).toEqual(['c2']);
+    expect(enregistre().etudiants[0]?.niveaux).toEqual({});
+  });
+});

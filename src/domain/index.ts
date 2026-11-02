@@ -27,6 +27,7 @@ export {
   modifierDescripteur,
   deplacerCritere,
   retirerCritere,
+  egaliserCriteres,
 } from './criteres';
 export {
   ajouterEtudiant,

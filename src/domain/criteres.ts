@@ -1,7 +1,7 @@
 import { deplacer, sans, type Sens } from './listes';
 import { niveauValide } from './niveaux';
 import { lireNom } from './noms';
-import { POIDS_TOTAL } from './poids';
+import { POIDS_TOTAL, egaliserPoids } from './poids';
 import { ok, erreur, type Resultat } from './resultat';
 import type { Critere, Dossier } from './types';
 
@@ -88,4 +88,15 @@ export function retirerCritere(dossier: Dossier, id: string): Resultat<Dossier> 
       commentaires: sans(e.commentaires, id),
     })),
   });
+}
+
+/** « Égaliser » : 100 % réparti également ; les dixièmes restants vont aux premiers critères. */
+export function egaliserCriteres(dossier: Dossier): Resultat<Dossier> {
+  const { criteres } = dossier.grille;
+  // Autant de poids que de critères : l'indice existe toujours.
+  const egalises = egaliserPoids(criteres.length).map((poids, i) => ({
+    ...(criteres[i] as Critere),
+    poids,
+  }));
+  return ok(avecCriteres(dossier, egalises));
 }

@@ -9,9 +9,8 @@ import {
 } from '../../../domain';
 import { Bouton, ChampDossier, Dialogue } from '../../composants';
 import { useDossier } from '../../etat';
+import { phrasesPertes } from '../../accords';
 import { MESSAGES_ERREUR } from '../../messages';
-
-const accorder = (n: number, un: string, plusieurs: string) => `${n} ${n > 1 ? plusieurs : un}`;
 
 /** Ce que retirer le dernier niveau effacerait : évaluations à ce niveau, descripteurs rédigés. */
 function pertes(dossier: Dossier): string[] {
@@ -21,13 +20,7 @@ function pertes(dossier: Dossier): string[] {
   const descripteurs = dossier.grille.criteres.filter(
     (c) => (c.descripteurs[dernier] ?? '').trim() !== '',
   ).length;
-  const evaluations = r.valeur.evaluationsEffacees;
-  return [
-    evaluations > 0 &&
-      accorder(evaluations, 'évaluation sera effacée.', 'évaluations seront effacées.'),
-    descripteurs > 0 &&
-      accorder(descripteurs, 'descripteur sera effacé.', 'descripteurs seront effacés.'),
-  ].filter((p): p is string => p !== false);
+  return phrasesPertes({ evaluations: r.valeur.evaluationsEffacees, descripteurs });
 }
 
 /** Libellés des niveaux, ajout et retrait du dernier (de 3 à 10). */
