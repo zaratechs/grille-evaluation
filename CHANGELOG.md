@@ -43,4 +43,7 @@ Commits conventionnels.
   repris tels quels de l'outil d'origine. Appliquer un modèle remplace niveaux et critères,
   garde titre, total et commentaires généraux.
 - Modèles personnels : enregistrer la grille courante, renommer, supprimer (nom unique).
+- Format de données versionné (version 1) et chaîne de migrations : une version absente
+  ou plus récente que l'application est refusée, et les données reçues ne sont jamais
+  modifiées.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
