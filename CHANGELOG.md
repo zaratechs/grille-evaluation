@@ -5,6 +5,12 @@ Commits conventionnels.
 
 ## [Non publié]
 
+## [1.0.0] — 2026-11-02
+
+Première version publiée : construire une grille d'évaluation critériée (25 modèles de
+Paulo Mendonça), évaluer un groupe une personne à la fois, et exporter en PDF, Word, CSV
+et JSON. Les données restent dans le navigateur.
+
 ### Ajouté
 
 - Outillage : Node.js 22.12 minimum, Vite, React 19, TypeScript strict
