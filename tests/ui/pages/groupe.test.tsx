@@ -216,6 +216,7 @@ describe('Groupe : exporter tout le groupe', () => {
   it('PDF, Word et CSV', async () => {
     const { user } = monterApp('/groupe', groupe());
     await user.click(bouton('PDF', exports()));
+    await screen.findByText(/^Fichier prêt :/);
     expect(rendus.pdfGroupe).toHaveBeenCalledWith(
       expect.objectContaining({ personnes: expect.any(Array) as unknown }),
     );
@@ -226,6 +227,7 @@ describe('Groupe : exporter tout le groupe', () => {
       TYPE_PDF,
     );
     await user.click(bouton('Word', exports()));
+    await vi.waitFor(() => expect(telecharger).toHaveBeenCalledTimes(2));
     expect(rendus.wordGroupe).toHaveBeenCalledTimes(1);
     expect(telecharger).toHaveBeenLastCalledWith(
       nomFichier('groupe', new Date(), 'docx'),
@@ -239,6 +241,8 @@ describe('Groupe : exporter tout le groupe', () => {
     d.grille.titre = 'Session';
     const { user } = monterApp('/groupe', d);
     await user.click(bouton('CSV', exports()));
+    // Le vrai rendu CSV est chargé par import() : on attend la fin, pas seulement le clic.
+    await screen.findByText(/^Fichier prêt :/);
     const [nom, contenu, type] = telecharger.mock.lastCall as [string, string, string];
     expect(nom).toBe(nomFichier('Session groupe', new Date(), 'csv'));
     expect(type).toBe('text/csv;charset=utf-8');

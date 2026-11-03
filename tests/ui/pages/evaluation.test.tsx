@@ -252,6 +252,7 @@ describe('Évaluation : exporter cette personne', () => {
   it('PDF : le rapport de la personne choisie, nommé par titre et personne', async () => {
     const { user } = monterApp('/evaluation?personne=e2', dossier());
     await user.click(bouton('PDF', exports()));
+    await screen.findByText(/^Fichier prêt :/);
     expect(rendus.pdfPersonne).toHaveBeenCalledWith(
       expect.objectContaining({ personne: 'Noé Tremblay', statut: 'Pas encore évaluée' }),
     );
@@ -270,6 +271,7 @@ describe('Évaluation : exporter cette personne', () => {
     d.grille.titre = 'Travail de session';
     const { user } = monterApp('/evaluation', d);
     await user.click(bouton('Word', exports()));
+    await screen.findByText(/^Fichier prêt :/);
     expect(rendus.wordPersonne).toHaveBeenCalledWith(
       expect.objectContaining({ personne: 'Élise Roy', titre: 'Travail de session' }),
     );
@@ -302,10 +304,11 @@ describe('Évaluation : exporter cette personne', () => {
     rendus.pdfPersonne.mockRejectedValueOnce(new Error('panne'));
     const { user } = monterApp('/evaluation', dossier());
     await user.click(bouton('PDF', exports()));
+    await screen.findByRole('alert');
     expect(screen.getByRole('alert')).toHaveTextContent('Le fichier n’a pas pu être créé.');
     expect(telecharger).not.toHaveBeenCalled();
     await user.click(bouton('PDF', exports()));
-    expect(telecharger).toHaveBeenCalledTimes(1);
+    await vi.waitFor(() => expect(telecharger).toHaveBeenCalledTimes(1));
     expect(screen.queryByRole('alert')).toBeNull();
   });
 });
