@@ -2,6 +2,8 @@ import {
   formaterPoids,
   formaterPoints,
   formaterPourcentage,
+  ponderationValide,
+  totalPoids,
   type Grille,
   type Note,
   type ResultatNote,
@@ -38,6 +40,10 @@ export function texteResultat(grille: Grille, r: ResultatNote): string {
 
 /** « 2 évaluations complètes sur 4 », moyenne et médiane ; ou « Aucune évaluation complète sur 4. » */
 export function phrasesSynthese(grille: Grille, s: SyntheseGroupe): string[] {
+  // Même phrase que pour une personne : sans poids valides, aucune note n'est calculée.
+  if (grille.criteres.length > 0 && !ponderationValide(grille.criteres)) {
+    return [`Note impossible : les poids font ${formaterPoids(totalPoids(grille.criteres))}`];
+  }
   if (!s.moyenne || !s.mediane) return [`Aucune évaluation complète sur ${s.total}.`];
   return [
     `${accorder(s.completes, 'évaluation complète', 'évaluations complètes')} sur ${s.total}`,

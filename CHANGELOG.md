@@ -172,6 +172,12 @@ Commits conventionnels.
   et les exports (phase 5) disent exactement la même chose ; ajout de la date en lettres
   (« 1er novembre 2026 »). Couverture de 100 % sur `src/textes/`.
 - Icône de l'onglet : `valse-1.png` remplace `favicon.svg`.
+- Évaluation : « Retirer le niveau » sous chaque critère évalué (le commentaire reste, le
+  focus revient sur le premier niveau). En lecture seule, changer de personne reste
+  possible ; seules les modifications sont désactivées (`Vue` reçoit des `outils` placés
+  hors des champs désactivés).
+- Synthèse du groupe (écran, PDF, Word) : « Note impossible : les poids font … » quand
+  les poids ne font pas 100 %, au lieu de « Aucune évaluation complète ».
 
 ### Retiré
 

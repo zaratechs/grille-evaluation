@@ -1,6 +1,7 @@
 import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { act, screen, within } from '@testing-library/react';
 import { dossierVide, nomFichier, type Dossier, type Etudiant } from '../../../src/domain';
+import { CLE_DOSSIER } from '../../../src/data-access';
 import { enregistre, monterApp } from '../outils/monter';
 
 const telecharger = vi.hoisted(() => vi.fn());
@@ -306,5 +307,62 @@ describe('Évaluation : exporter cette personne', () => {
     await user.click(bouton('PDF', exports()));
     expect(telecharger).toHaveBeenCalledTimes(1);
     expect(screen.queryByRole('alert')).toBeNull();
+  });
+});
+
+describe('Évaluation : retirer le niveau d’un critère', () => {
+  it('retire le niveau, garde le commentaire, met le résultat à jour', async () => {
+    const { user } = monterApp('/evaluation', dossier());
+    const fond = critere(/^Fond/);
+    await user.click(bouton('Retirer le niveau', fond));
+    expect(personne('e1').niveaux).toEqual({ c2: 3 });
+    expect(personne('e1').commentaires).toEqual({ c1: 'Clair.' });
+    expect(within(fond).getByRole('radio', { name: '5 Excellent' })).not.toBeChecked();
+    expect(resultat()).toHaveTextContent('Incomplète');
+  });
+
+  it('le bouton disparaît et le focus va sur le premier niveau du critère', async () => {
+    const { user } = monterApp('/evaluation', dossier());
+    const fond = critere(/^Fond/);
+    await user.click(bouton('Retirer le niveau', fond));
+    expect(within(fond).queryByRole('button', { name: 'Retirer le niveau' })).toBeNull();
+    expect(within(fond).getAllByRole('radio')[0]).toHaveFocus();
+  });
+
+  it('absent d’un critère sans niveau', () => {
+    monterApp('/evaluation', dossier());
+    expect(
+      within(critere(/^Bonus/)).queryByRole('button', { name: 'Retirer le niveau' }),
+    ).toBeNull();
+  });
+});
+
+describe('Évaluation : lecture seule (dossier modifié dans un autre onglet)', () => {
+  const autreOnglet = () =>
+    act(() => {
+      window.dispatchEvent(new StorageEvent('storage', { key: CLE_DOSSIER }));
+    });
+
+  it('les modifications sont désactivées', () => {
+    monterApp('/evaluation', dossier());
+    autreOnglet();
+    expect(within(critere(/^Fond/)).getAllByRole('radio')[0]).toBeDisabled();
+    expect(
+      within(critere(/^Fond/)).getByRole('button', { name: 'Retirer le niveau' }),
+    ).toBeDisabled();
+    expect(screen.getByRole('textbox', { name: 'Commentaire général' })).toBeDisabled();
+    expect(bouton('Effacer l’évaluation de cette personne')).toBeDisabled();
+  });
+
+  it('changer de personne reste possible : rien n’est modifié', async () => {
+    const { user } = monterApp('/evaluation', dossier());
+    autreOnglet();
+    expect(choixPersonne()).toBeEnabled();
+    await user.click(bouton('Suivante'));
+    expect(choixPersonne()).toHaveValue('e2');
+    await user.selectOptions(choixPersonne(), 'e3');
+    expect(choixPersonne()).toHaveValue('e3');
+    await user.click(bouton('Précédente'));
+    expect(choixPersonne()).toHaveValue('e2');
   });
 });

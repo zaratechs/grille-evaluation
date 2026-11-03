@@ -11,7 +11,7 @@ function monter() {
       {
         path: '/',
         element: (
-          <Vue titre="Grille">
+          <Vue titre="Grille" outils={<button type="button">Suivante</button>}>
             <label>
               Titre <input />
             </label>
@@ -63,5 +63,14 @@ describe('Vue', () => {
       window.dispatchEvent(new StorageEvent('storage', { key: CLE_DOSSIER }));
     });
     expect(champ).toBeDisabled();
+  });
+
+  it('les outils (ce qui ne modifie rien) restent actifs en lecture seule', () => {
+    monter();
+    act(() => {
+      window.dispatchEvent(new StorageEvent('storage', { key: CLE_DOSSIER }));
+    });
+    expect(screen.getByRole('textbox', { name: 'Titre' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Suivante' })).toBeEnabled();
   });
 });

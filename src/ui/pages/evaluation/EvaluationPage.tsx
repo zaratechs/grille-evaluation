@@ -22,6 +22,7 @@ const STYLE_LIEN = 'font-medium text-marque-700 underline hover:text-marque-800'
 export function EvaluationPage() {
   const { dossier } = useDossier();
   const { etudiants, grille } = dossier;
+  if (etudiants.length > 0 && grille.criteres.length > 0) return <Evaluation />;
   return (
     <Vue titre="Évaluation">
       {etudiants.length === 0 ? (
@@ -31,15 +32,13 @@ export function EvaluationPage() {
             Aller au Groupe
           </Link>
         </p>
-      ) : grille.criteres.length === 0 ? (
+      ) : (
         <p className="text-texte-attenue">
           La grille n’a encore aucun critère.{' '}
           <Link to="/grille" className={STYLE_LIEN}>
             Aller à la Grille
           </Link>
         </p>
-      ) : (
-        <Evaluation />
       )}
     </Vue>
   );
@@ -73,81 +72,90 @@ function Evaluation() {
 
   const pertes = pertesEtudiant(e);
 
-  return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-end gap-2">
-        <div className="min-w-0 flex-1 sm:max-w-sm">
-          <label htmlFor={idChoix} className="block text-sm font-medium text-texte">
-            Personne
-          </label>
-          <select
-            id={idChoix}
-            value={e.id}
-            onChange={(ev) => aller(etudiants.findIndex((x) => x.id === ev.target.value))}
-            className="mt-1 block w-full rounded-champ border border-bordure-champ bg-surface px-2 py-1.5 text-sm text-texte focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus"
-          >
-            {etudiants.map((x) => (
-              <option key={x.id} value={x.id}>
-                {x.nom}
-              </option>
-            ))}
-          </select>
-        </div>
-        <Bouton ref={precedente} disabled={position === 0} onClick={() => aller(position - 1)}>
-          Précédente
-        </Bouton>
-        <Bouton
-          ref={suivante}
-          disabled={position === etudiants.length - 1}
-          onClick={() => aller(position + 1)}
+  // La navigation ne modifie rien : hors des champs de la vue, elle reste active en lecture seule.
+  const navigation = (
+    <div className="flex flex-wrap items-end gap-2">
+      <div className="min-w-0 flex-1 sm:max-w-sm">
+        <label htmlFor={idChoix} className="block text-sm font-medium text-texte">
+          Personne
+        </label>
+        <select
+          id={idChoix}
+          value={e.id}
+          onChange={(ev) => aller(etudiants.findIndex((x) => x.id === ev.target.value))}
+          className="mt-1 block w-full rounded-champ border border-bordure-champ bg-surface px-2 py-1.5 text-sm text-texte focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus"
         >
-          Suivante
-        </Bouton>
-        <p className="py-1.5 text-sm text-texte-attenue">
-          {position + 1} / {etudiants.length}
-        </p>
+          {etudiants.map((x) => (
+            <option key={x.id} value={x.id}>
+              {x.nom}
+            </option>
+          ))}
+        </select>
       </div>
-
-      <Resultat etudiant={e} />
-
-      {grille.criteres.map((c) => (
-        <CritereEvalue key={`${e.id}-${c.id}`} etudiant={e} critere={c} />
-      ))}
-
-      <Champ
-        multiligne
-        etiquette="Commentaire général"
-        valeur={e.commentaireGeneral}
-        surSaisie={(t) => modifier((d) => commenterGeneral(d, e.id, t))}
-      />
-
-      <BoutonsExport
-        titre="Exporter cette personne"
-        formats={['pdf', 'word']}
-        exporter={(f) => exporterPersonne(dossier, e.id, f === 'pdf' ? 'pdf' : 'word')}
-      />
-
-      <div>
-        <Bouton variante="danger" disabled={pertes.length === 0} onClick={() => setEffacer(pertes)}>
-          Effacer l’évaluation de cette personne
-        </Bouton>
-      </div>
-
-      <Dialogue
-        ouvert={effacer !== null}
-        titre={`Effacer l’évaluation de « ${e.nom} » ?`}
-        confirmer="Effacer l’évaluation"
-        surAnnuler={() => setEffacer(null)}
-        surConfirmer={() => {
-          setEffacer(null);
-          modifier((d) => reinitialiserEvaluation(d, e.id));
-        }}
+      <Bouton ref={precedente} disabled={position === 0} onClick={() => aller(position - 1)}>
+        Précédente
+      </Bouton>
+      <Bouton
+        ref={suivante}
+        disabled={position === etudiants.length - 1}
+        onClick={() => aller(position + 1)}
       >
-        {effacer?.map((p) => (
-          <p key={p}>{p}</p>
-        ))}
-      </Dialogue>
+        Suivante
+      </Bouton>
+      <p className="py-1.5 text-sm text-texte-attenue">
+        {position + 1} / {etudiants.length}
+      </p>
     </div>
+  );
+
+  return (
+    <Vue titre="Évaluation" outils={navigation}>
+      <div className="flex flex-col gap-6">
+        <Resultat etudiant={e} />
+
+        {grille.criteres.map((c) => (
+          <CritereEvalue key={`${e.id}-${c.id}`} etudiant={e} critere={c} />
+        ))}
+
+        <Champ
+          multiligne
+          etiquette="Commentaire général"
+          valeur={e.commentaireGeneral}
+          surSaisie={(t) => modifier((d) => commenterGeneral(d, e.id, t))}
+        />
+
+        <BoutonsExport
+          titre="Exporter cette personne"
+          formats={['pdf', 'word']}
+          exporter={(f) => exporterPersonne(dossier, e.id, f === 'pdf' ? 'pdf' : 'word')}
+        />
+
+        <div>
+          <Bouton
+            variante="danger"
+            disabled={pertes.length === 0}
+            onClick={() => setEffacer(pertes)}
+          >
+            Effacer l’évaluation de cette personne
+          </Bouton>
+        </div>
+
+        <Dialogue
+          ouvert={effacer !== null}
+          titre={`Effacer l’évaluation de « ${e.nom} » ?`}
+          confirmer="Effacer l’évaluation"
+          surAnnuler={() => setEffacer(null)}
+          surConfirmer={() => {
+            setEffacer(null);
+            modifier((d) => reinitialiserEvaluation(d, e.id));
+          }}
+        >
+          {effacer?.map((p) => (
+            <p key={p}>{p}</p>
+          ))}
+        </Dialogue>
+      </div>
+    </Vue>
   );
 }
 
@@ -181,6 +189,7 @@ function CritereEvalue({ etudiant, critere }: { etudiant: Etudiant; critere: Cri
   const { dossier, modifier } = useDossier();
   const id = useId();
   const choisi = etudiant.niveaux[critere.id];
+  const premier = useRef<HTMLInputElement>(null);
   const poids = critere.poids === 0 ? 'non noté' : formaterPoids(critere.poids);
   return (
     <fieldset className="min-w-0 rounded-carte border border-bordure p-4">
@@ -198,6 +207,7 @@ function CritereEvalue({ etudiant, critere }: { etudiant: Etudiant; critere: Cri
             >
               <input
                 type="radio"
+                ref={k === 0 ? premier : undefined}
                 name={`niveau-${critere.id}`}
                 checked={choisi === n}
                 onChange={() => modifier((d) => evaluer(d, etudiant.id, critere.id, n))}
@@ -219,6 +229,18 @@ function CritereEvalue({ etudiant, critere }: { etudiant: Etudiant; critere: Cri
           );
         })}
       </div>
+      {choisi !== undefined && (
+        <Bouton
+          className="mt-2"
+          onClick={() => {
+            modifier((d) => evaluer(d, etudiant.id, critere.id, null));
+            // Le bouton disparaît : le focus reste dans le critère, sur son premier niveau.
+            premier.current?.focus();
+          }}
+        >
+          Retirer le niveau
+        </Bouton>
+      )}
       <Champ
         className="mt-3"
         multiligne

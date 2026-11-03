@@ -81,4 +81,14 @@ describe('phrasesSynthese', () => {
       phrasesSynthese(grille(), { total: 3, completes: 0, moyenne: null, mediane: null }),
     ).toEqual(['Aucune évaluation complète sur 3.']);
   });
+
+  it('poids différents de 100 % : « Note impossible », comme pour une personne', () => {
+    const g: Grille = {
+      ...grille(),
+      criteres: [{ id: 'c1', nom: 'Fond', poids: 950, descripteurs: [] }],
+    };
+    expect(phrasesSynthese(g, { total: 3, completes: 0, moyenne: null, mediane: null })).toEqual([
+      'Note impossible : les poids font 95,0\u00a0%',
+    ]);
+  });
 });

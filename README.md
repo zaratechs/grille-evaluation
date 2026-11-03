@@ -32,8 +32,9 @@ L'application a quatre vues, chacune à sa propre adresse (`#/grille`, `#/evalua
   une synthèse donne la moyenne et la médiane des évaluations complètes.
 - **Évaluation.** Une personne à la fois, avec « Précédente » et « Suivante ». Un groupe
   de boutons radio par critère, avec tous les descripteurs (les flèches du clavier
-  changent de niveau), un commentaire par critère et un commentaire général. La note se
-  met à jour en direct ; aucune note n'est donnée si les poids ne font pas 100 %.
+  changent de niveau), « Retirer le niveau » pour revenir à « non évalué », un commentaire
+  par critère et un commentaire général. La note se met à jour en direct ; aucune note
+  n'est donnée si les poids ne font pas 100 %, ni dans la synthèse du groupe.
 - **Exports.** Dans Évaluation, « Exporter cette personne » en PDF ou en Word ; dans
   Groupe, « Exporter tout le groupe » en PDF, Word ou CSV (pour Excel en français).
 - **Vos données.** Exporter tout ou la grille seule (sans aucun nom), importer un fichier
@@ -69,14 +70,16 @@ fait au clavier, et chaque vue s'affiche sans défilement horizontal dès 320 px
   (`grille-evaluation:copie-de-secours`) avant toute nouvelle écriture, et peut être
   téléchargée.
 - **Autre onglet.** Si le dossier est modifié dans un autre onglet, celui-ci cesse
-  d'enregistrer jusqu'au rechargement, pour ne pas effacer ce travail.
+  d'enregistrer jusqu'au rechargement, pour ne pas effacer ce travail. On peut encore y
+  lire les évaluations et changer de personne.
 - **Export et import JSON**, dans la vue « Vos données ». L'export complet sert à changer d'ordinateur ou à garder
   plusieurs groupes ; l'export « grille seule » partage une grille sans aucune donnée
   personnelle. Un import remplace la grille et le groupe, et ajoute ses modèles personnels
   aux vôtres. Tout fichier importé est vérifié et réparé ; un fichier de plus de 5 Mo, ou
   qui n'est pas un dossier, est refusé sans rien modifier.
 - **Remise à zéro.** « Tout effacer… », après confirmation, ne supprime que les clés
-  `grille-evaluation:*`.
+  `grille-evaluation:*`, puis enregistre un dossier vide : les autres onglets ouverts le
+  voient et passent en lecture seule, au lieu de réécrire l'ancien dossier.
 
 ## Exports
 

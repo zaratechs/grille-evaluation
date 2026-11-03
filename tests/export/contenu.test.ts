@@ -146,3 +146,13 @@ describe('rapportGroupe', () => {
     });
   });
 });
+
+describe('rapportGroupe : poids différents de 100 %', () => {
+  it('la synthèse dit « Note impossible », sans compter les évaluations', () => {
+    const d = jeu();
+    d.grille.criteres[0]!.poids = 550;
+    expect(rapportGroupe(d, DATE).synthese).toEqual([
+      'Note impossible : les poids font 95,0\u00a0%',
+    ]);
+  });
+});

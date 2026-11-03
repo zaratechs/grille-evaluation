@@ -198,6 +198,14 @@ describe('Groupe : synthèse', () => {
     d.etudiants[0] = { ...d.etudiants[0]!, niveaux: {} };
     monterApp('/groupe', d);
     expect(synthese()).toHaveTextContent('Aucune évaluation complète sur 3.');
+  });
+
+  it('poids différents de 100 % : « Note impossible », comme dans la vue Évaluation', () => {
+    const d = groupe();
+    d.grille.criteres[0]!.poids -= 50;
+    monterApp('/groupe', d);
+    expect(synthese()).toHaveTextContent('Note impossible : les poids font 95,0 %');
+    expect(synthese()).not.toHaveTextContent('Aucune évaluation complète');
     expect(synthese()).not.toHaveTextContent('Moyenne');
   });
 });
