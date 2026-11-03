@@ -4,6 +4,7 @@ import {
   CLE_DOSSIER,
   charger,
   enregistrer,
+  lireCopie,
   reinitialiser,
 } from '../../src/data-access/stockage';
 import { ajouterCritere, changerPoids } from '../../src/domain/criteres';
@@ -172,5 +173,18 @@ describe('reinitialiser', () => {
     enregistrer(dossier());
     faireEchouer('removeItem');
     expect(reinitialiser()).toEqual({ ok: false, erreur: 'ecriture-impossible' });
+  });
+});
+
+describe('lireCopie', () => {
+  it('rend la copie de secours, ou null s’il n’y en a pas', () => {
+    expect(lireCopie()).toBeNull();
+    localStorage.setItem(CLE_COPIE, '{ original');
+    expect(lireCopie()).toBe('{ original');
+  });
+
+  it('stockage inaccessible : null, sans lever', () => {
+    faireEchouer('getItem');
+    expect(lireCopie()).toBeNull();
   });
 });

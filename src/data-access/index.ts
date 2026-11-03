@@ -6,6 +6,7 @@ export {
   CLE_COPIE,
   charger,
   enregistrer,
+  lireCopie,
   reinitialiser,
   type Avertissement,
   type Chargement,

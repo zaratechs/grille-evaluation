@@ -107,3 +107,12 @@ export function reinitialiser(): Resultat<null> {
     return erreur('ecriture-impossible');
   }
 }
+
+/** La copie de secours gardée au chargement, ou `null` s'il n'y en a pas (ou si le stockage refuse). */
+export function lireCopie(): string | null {
+  try {
+    return stockage().getItem(CLE_COPIE);
+  } catch {
+    return null;
+  }
+}

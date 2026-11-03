@@ -115,6 +115,12 @@ Commits conventionnels.
   ne font pas 100 % ; un critère de poids 0 est « non noté ». Commentaire par critère,
   commentaire général, et « Effacer l'évaluation de cette personne » avec confirmation.
   Sans personne ou sans critère, la vue mène au Groupe ou à la Grille.
+- Vue Vos données : « Exporter tout » et « Exporter la grille seule » (sans aucun nom de
+  personne étudiante) ; import d'un fichier .json avec une confirmation qui résume ce qui
+  change (grille seule ou dossier complet, modèles ajoutés), puis un avis avec le bilan de
+  réparation ; un fichier refusé affiche son message et ne change rien. Téléchargement de
+  la copie de secours quand il y en a une. « Tout effacer… » avec confirmation.
+  `lireCopie()` ajoutée à l'accès aux données.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Retiré

@@ -47,12 +47,13 @@ suivantes (voir `docs/superpowers/specs/`).
   téléchargée.
 - **Autre onglet.** Si le dossier est modifié dans un autre onglet, celui-ci cesse
   d'enregistrer jusqu'au rechargement, pour ne pas effacer ce travail.
-- **Export et import JSON.** L'export complet sert à changer d'ordinateur ou à garder
+- **Export et import JSON**, dans la vue « Vos données ». L'export complet sert à changer d'ordinateur ou à garder
   plusieurs groupes ; l'export « grille seule » partage une grille sans aucune donnée
   personnelle. Un import remplace la grille et le groupe, et ajoute ses modèles personnels
   aux vôtres. Tout fichier importé est vérifié et réparé ; un fichier de plus de 5 Mo, ou
   qui n'est pas un dossier, est refusé sans rien modifier.
-- **Remise à zéro.** Elle ne supprime que les clés `grille-evaluation:*`.
+- **Remise à zéro.** « Tout effacer… », après confirmation, ne supprime que les clés
+  `grille-evaluation:*`.
 
 ## Prérequis
 
