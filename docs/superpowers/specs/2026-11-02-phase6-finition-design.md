@@ -1,6 +1,6 @@
 # Phase 6 — Finition : design
 
-Statut : **proposée, à valider par Réda** (section 12).
+Statut : **validée par Réda le 2026-11-02** (section 12).
 
 ## 1. Contexte
 
@@ -144,18 +144,19 @@ Signalés lors des tâches 8 à 10 de la phase 4, à trancher (question 4) :
 - Le site est en ligne sur Vercel avec ses en-têtes, et les trois exports y fonctionnent.
 - Version 1.0.0 dans `package.json`, le CHANGELOG et le pied de page.
 
-## 12. Questions pour Réda
+## 12. Décisions
 
-1. **Transparence, développement et IA** : quels outils citer pour cette application
-   (Claude Code ? les agents Ollama, comme dans la Trousse ?) ; le logo `valse-1.png`
-   a-t-il été généré par une IA, et laquelle ? La phrase « conforme à la Loi 25 »
-   s'applique-t-elle ici aussi ?
-2. **Signaler une erreur** : le dépôt `zaratechs/grille-evaluation` sera-t-il public ?
-   Si oui, lien vers ses signalements ; sinon, pas de section.
-3. **Aide** : l'encadré « Pour commencer » sur la vue Grille vide vous convient-il, ou
-   préférez-vous une page « Aide » dans la navigation ?
-4. **Points de la section 7** : accepter les quatre propositions ?
-5. **Mobile** : barre Précédente / Suivante collée en bas de l'écran dans Évaluation sur
-   téléphone ?
-6. **Sécurité** : d'accord pour la politique de sécurité stricte de la section 9, au prix
-   d'un test de plus ?
+Validées par Réda le 2026-11-02.
+
+1. **Transparence, développement** : « Grille d'évaluation est conçue avec Claude Code. »
+   Le logo a été généré avec l'outil d'IA Nano Banana 2 de Gemini.
+2. **Transparence, IA utilisée** : le texte des autres pages Transparence de Réda est
+   repris tel quel (IA locale conçue par l'auteur, conforme à la Loi 25, l'auteur conserve
+   l'entière responsabilité du contenu final).
+3. **Signaler une erreur** : le dépôt `zaratechs/grille-evaluation` sera public ; lien vers
+   ses signalements (`/issues`), qui s'ouvre dans un nouvel onglet.
+4. **Aide** : encadré « Pour commencer » sur la vue Grille vide, pas de page d'aide.
+5. **Points de la phase 4** : les quatre propositions de la section 7 sont acceptées.
+6. **Mobile** : barre Précédente / Suivante collée en bas de l'écran sous 480 px.
+7. **Sécurité** : politique de sécurité stricte dans `vercel.json`, testée avec les trois
+   exports avant d'être livrée.
