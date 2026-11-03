@@ -1,14 +1,28 @@
-# Mises à jour encadrées : une demande de fusion par mois, vérifiée par la CI, fusionnée
-# par Réda. Voir la section « Maintenance » du README.
+# Mises à jour encadrées : une tournée par mois, chaque demande vérifiée par la CI et
+# fusionnée par Réda. Voir la section « Maintenance » du README.
 version: 2
 updates:
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: monthly
+    # Règle du projet : une version n'est adoptée que deux semaines après sa publication.
+    cooldown:
+      default-days: 14
     open-pull-requests-limit: 5
+    ignore:
+      # Les types de Node suivent le minimum de package.json (engines), changé à la main.
+      - dependency-name: '@types/node'
+        update-types:
+          - 'version-update:semver-major'
     groups:
-      # Mineures et correctifs ensemble ; chaque version majeure arrive seule.
+      # vitest et ses modules exigent la même version : ils montent ensemble, même en
+      # majeure. Le premier groupe qui correspond l'emporte.
+      vitest:
+        patterns:
+          - vitest
+          - '@vitest/*'
+      # Mineures et correctifs ensemble ; chaque autre version majeure arrive seule.
       mineures-et-correctifs:
         update-types:
           - minor
@@ -17,3 +31,5 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    cooldown:
+      default-days: 14

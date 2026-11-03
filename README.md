@@ -157,9 +157,11 @@ docs/verification-accessibilite.md  parcours manuel avec un lecteur d'écran
 
 ## Maintenance
 
-- **Dépendances.** Dependabot (`.github/dependabot.yml`) ouvre une demande de fusion par
-  mois : les mises à jour mineures et les correctifs de npm groupés, chaque version
-  majeure à part, et les actions GitHub. La CI vérifie chaque demande ; on ne fusionne
+- **Dépendances.** Dependabot (`.github/dependabot.yml`) fait une tournée par mois : les
+  mises à jour mineures et les correctifs de npm groupés, chaque version majeure à part
+  (sauf vitest et `@vitest/*`, qui montent ensemble), et les actions GitHub. Il attend
+  14 jours après la publication d'une version, et ne propose pas de version majeure de
+  `@types/node`, qui suit le minimum de Node. La CI vérifie chaque demande ; on ne fusionne
   qu'une demande verte, après avoir lu les notes de version d'une majeure. `npm run audit`
   (dans `npm run ci` et la CI) échoue sur une faille grave ou critique d'une dépendance
   livrée aux utilisateurs.

@@ -12,6 +12,8 @@ const blocs = () =>
     .slice(1)
     .map((b) => ({ ecosysteme: /^\s*"?([\w-]+)"?/.exec(b)?.[1], texte: b }));
 
+const npm = () => blocs().find((b) => b.ecosysteme === 'npm').texte;
+
 describe('Dependabot', () => {
   it('existe, en version 2', () => {
     expect(existsSync(FICHIER)).toBe(true);
@@ -29,10 +31,29 @@ describe('Dependabot', () => {
     }
   });
 
+  it('attend 14 jours après la publication d’une version (règle des deux semaines)', () => {
+    for (const b of blocs()) {
+      expect(b.texte, b.ecosysteme).toMatch(/cooldown:\s*\n\s*default-days: 14\s*$/m);
+    }
+  });
+
   it('npm : mineures et correctifs groupés en une seule demande ; majeures une à une', () => {
-    const npm = blocs().find((b) => b.ecosysteme === 'npm').texte;
-    expect(npm).toMatch(/groups:/);
-    expect(npm).toMatch(/update-types:\s*\n\s*- ['"]?minor['"]?\s*\n\s*- ['"]?patch['"]?/);
-    expect(npm).not.toMatch(/- ['"]?major['"]?/);
+    expect(npm()).toMatch(/update-types:\s*\n\s*- ['"]?minor['"]?\s*\n\s*- ['"]?patch['"]?/);
+    expect(npm()).not.toMatch(/- ['"]?major['"]?/);
+  });
+
+  it('vitest et @vitest/* montent ensemble, même en version majeure', () => {
+    const groupe = /vitest:\s*\n\s*patterns:\s*\n((?:\s*- .+\n?)+)/.exec(npm());
+    expect(groupe).not.toBeNull();
+    const motifs = [...groupe[1].matchAll(/- ['"]?([^'"\n]+)['"]?/g)].map((m) => m[1].trim());
+    expect(motifs).toEqual(['vitest', '@vitest/*']);
+    // Le premier groupe qui correspond l'emporte : celui de vitest passe avant les mineures.
+    expect(npm().indexOf('vitest:')).toBeLessThan(npm().indexOf('mineures-et-correctifs:'));
+  });
+
+  it('@types/node ne change pas de version majeure seul : il suit le minimum de Node', () => {
+    expect(npm()).toMatch(
+      /ignore:\s*\n(?:\s*#.*\n)*\s*- dependency-name: ['"]@types\/node['"]\s*\n\s*update-types:\s*\n\s*- ['"]version-update:semver-major['"]/,
+    );
   });
 });
