@@ -122,11 +122,12 @@ npx playwright install chromium   # une seule fois, pour les tests de bout en bo
 | `npm run lint`             | ESLint puis Prettier `--check`                                                 |
 | `npm run format`           | Formate tout le dépôt avec Prettier                                            |
 | `npm run check:neutralite` | Échoue si un nom d'établissement ou un courriel apparaît dans un fichier livré |
+| `npm run audit`            | `npm audit` des dépendances livrées : échoue sur une faille grave ou critique  |
 | `npm run test`             | Vitest : projets `node` (scripts, domaine) et `jsdom` (interface)              |
 | `npm run test:watch`       | Vitest en mode surveillance                                                    |
 | `npm run test:coverage`    | Vitest avec couverture v8 (100 % domaine et data-access, 90 % interface)       |
 | `npm run test:e2e`         | Playwright sur le site construit : parcours au clavier, axe, largeur 320 px    |
-| `npm run ci`               | lint → typecheck → check:neutralite → test:coverage → build → test:e2e         |
+| `npm run ci`               | lint → typecheck → check:neutralite → audit → test:coverage → build → test:e2e |
 
 `npm run ci` exécute exactement les mêmes étapes que la CI GitHub Actions
 (`.github/workflows/ci.yml`) ; un test vérifie que les deux restent alignés.
@@ -153,6 +154,29 @@ tests/          tests Vitest (domain, data, scripts, data-access, ui) et Playwri
 docs/superpowers/  specs et plans de chaque phase
 docs/verification-accessibilite.md  parcours manuel avec un lecteur d'écran
 ```
+
+## Maintenance
+
+- **Dépendances.** Dependabot (`.github/dependabot.yml`) ouvre une demande de fusion par
+  mois : les mises à jour mineures et les correctifs de npm groupés, chaque version
+  majeure à part, et les actions GitHub. La CI vérifie chaque demande ; on ne fusionne
+  qu'une demande verte, après avoir lu les notes de version d'une majeure. `npm run audit`
+  (dans `npm run ci` et la CI) échoue sur une faille grave ou critique d'une dépendance
+  livrée aux utilisateurs.
+- **Mettre à jour à la main.** `npm install paquet@version --save-exact`, choisir une
+  version publiée depuis au moins deux semaines, puis `npm run ci` (et `TZ=UTC npm run ci`).
+- **Police des PDF.** `src/export/polices/notoSans.ts` contient Noto Sans réduite aux
+  caractères latins. Pour la régénérer (autre version, autres caractères), hors du
+  dépôt, dans un dossier temporaire :
+  1. `npm install @expo-google-fonts/noto-sans@0.4.2 subset-font@2.8.0` ;
+  2. réduire `NotoSans_400Regular.ttf` et `NotoSans_700Bold.ttf` avec `subset-font` aux
+     plages U+0020-007E, U+00A0-024F, U+0300-036F, U+1E00-1EFF, U+2000-206F, U+20AC et
+     U+2122, en sortie `truetype` ;
+  3. encoder chaque fichier en base64 dans `notoSans.ts`, mettre à jour l'en-tête de
+     provenance, puis `npm test` : les tests du PDF relisent « Nguyễn » et « Łukasz ».
+- **Publier une version.** Passer `version` de `package.json` (affichée dans le pied de
+  page), déplacer « Non publié » du CHANGELOG vers une section datée, commiter, puis
+  `git tag vX.Y.Z` et `git push --tags`.
 
 ## Déploiement sur Vercel
 

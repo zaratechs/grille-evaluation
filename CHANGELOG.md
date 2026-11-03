@@ -198,6 +198,11 @@ Commits conventionnels.
   visuel, du lien d'évitement au pied de page. Les tests ont été éprouvés en cassant
   volontairement le focus et la règle de mouvement réduit. Parcours manuel avec NVDA,
   Firefox et VoiceOver : `docs/verification-accessibilite.md`.
+- Maintenance : Dependabot une fois par mois (npm, mineures et correctifs groupés, majeures
+  à part ; actions GitHub). Script `npm run audit` (failles graves des dépendances
+  livrées), ajouté à `npm run ci` et à la CI. Actions de la CI passées sur Node 24
+  (`checkout` v7, `setup-node` v7, `cache` v6, `upload-artifact` v7), un test l'exige.
+  README : section « Maintenance » (dépendances, police des PDF, publier une version).
 - Tests des boutons d'export : ils attendent la fin de la création du fichier, et non
   plus seulement le clic (échec en CI : le rendu CSV, chargé par `import()`, n'était pas
   encore prêt sur une machine plus lente).

@@ -15,11 +15,12 @@
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "check:neutralite": "node scripts/check-neutralite.mjs",
+    "audit": "npm audit --omit=dev --audit-level=high",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "ci": "npm run lint && npm run typecheck && npm run check:neutralite && npm run test:coverage && npm run build && npm run test:e2e"
+    "ci": "npm run lint && npm run typecheck && npm run check:neutralite && npm run audit && npm run test:coverage && npm run build && npm run test:e2e"
   },
   "dependencies": {
     "docx": "9.7.1",

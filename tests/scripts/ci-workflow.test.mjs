@@ -25,6 +25,22 @@ describe('workflow CI', () => {
     expect(etapesWorkflow(yml)).toEqual(etapesLocales());
   });
 
+  it('audite les dépendances livrées (failles graves) avant les tests', () => {
+    expect(pkg.scripts.audit).toBe('npm audit --omit=dev --audit-level=high');
+    expect(etapesLocales()).toContain('audit');
+    expect(etapesLocales().indexOf('audit')).toBeLessThan(etapesLocales().indexOf('test:coverage'));
+  });
+
+  it('n’utilise que des actions qui tournent sur Node 24 (Node 20 n’est plus pris en charge)', () => {
+    // Première version majeure de chaque action sur Node 24.
+    const minimum = { checkout: 5, 'setup-node': 5, cache: 5, 'upload-artifact': 6 };
+    const actions = [...yml.matchAll(/uses: actions\/([\w-]+)@v(\d+)/g)];
+    expect(actions.map((a) => a[1]).sort()).toEqual(Object.keys(minimum).sort());
+    for (const [, nom, version] of actions) {
+      expect(Number(version), nom).toBeGreaterThanOrEqual(minimum[nom]);
+    }
+  });
+
   it('se déclenche sur main et sur les pull requests', () => {
     expect(yml).toMatch(/push:\s*\n\s*branches:\s*\[main\]/);
     expect(yml).toMatch(/^\s*pull_request:/m);

@@ -74,6 +74,18 @@ describe('README', () => {
     expect(readme).toMatch(/copie de secours/);
   });
 
+  it('a une section « Maintenance » : dépendances, police et version', () => {
+    expect(readme).toMatch(/^## Maintenance$/m);
+    const section = readme.split(/^## Maintenance$/m)[1].split(/^## /m)[0];
+    expect(section).toMatch(/Dependabot/);
+    expect(section).toContain('npm run audit');
+    expect(section).toMatch(/CHANGELOG/);
+    // Les plages de la police réduite : les mêmes que dans l'en-tête de notoSans.ts.
+    const plages = lire('src/export/polices/notoSans.ts').match(/U\+[0-9A-F]{4}(?:-[0-9A-F]{4})?/g);
+    expect(plages.length).toBeGreaterThanOrEqual(7);
+    for (const p of plages) expect(section).toContain(p);
+  });
+
   it('explique le déploiement sur Vercel', () => {
     expect(readme).toMatch(/Vercel/);
     expect(readme).toContain('dist');
