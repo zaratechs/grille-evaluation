@@ -140,7 +140,7 @@ class Page {
   }
 
   /** Pied de page sur chaque page, une fois le nombre de pages connu ; puis les octets. */
-  terminer(): Uint8Array {
+  terminer(): Uint8Array<ArrayBuffer> {
     const total = this.doc.getNumberOfPages();
     for (let n = 1; n <= total; n++) {
       this.doc.setPage(n);
@@ -188,7 +188,7 @@ function enTete(page: Page, titre: string, date: string) {
 }
 
 /** Le PDF d'une personne. */
-export async function pdfPersonne(r: RapportPersonne): Promise<Uint8Array> {
+export async function pdfPersonne(r: RapportPersonne): Promise<Uint8Array<ArrayBuffer>> {
   const page = new Page(`${r.titre} — ${r.personne}`);
   enTete(page, r.titre, r.date);
   blocPersonne(page, r);
@@ -196,7 +196,7 @@ export async function pdfPersonne(r: RapportPersonne): Promise<Uint8Array> {
 }
 
 /** Le PDF du groupe : synthèse en première page, puis une personne par page. */
-export async function pdfGroupe(g: RapportGroupe): Promise<Uint8Array> {
+export async function pdfGroupe(g: RapportGroupe): Promise<Uint8Array<ArrayBuffer>> {
   const page = new Page(`${g.titre} — Groupe`);
   enTete(page, g.titre, g.date);
   titre2(page, 'Synthèse du groupe');

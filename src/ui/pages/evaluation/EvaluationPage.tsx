@@ -11,8 +11,9 @@ import {
   type Etudiant,
 } from '../../../domain';
 import { pertesEtudiant, texteResultat } from '../../../textes';
-import { Bouton, Champ, Dialogue } from '../../composants';
+import { Bouton, BoutonsExport, Champ, Dialogue } from '../../composants';
 import { useDossier, useSelection } from '../../etat';
+import { exporterPersonne } from '../../exports';
 import { Vue } from '../../layout';
 
 const STYLE_LIEN = 'font-medium text-marque-700 underline hover:text-marque-800';
@@ -118,6 +119,12 @@ function Evaluation() {
         etiquette="Commentaire général"
         valeur={e.commentaireGeneral}
         surSaisie={(t) => modifier((d) => commenterGeneral(d, e.id, t))}
+      />
+
+      <BoutonsExport
+        titre="Exporter cette personne"
+        formats={['pdf', 'word']}
+        exporter={(f) => exporterPersonne(dossier, e.id, f === 'pdf' ? 'pdf' : 'word')}
       />
 
       <div>

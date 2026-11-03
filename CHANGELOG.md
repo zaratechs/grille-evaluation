@@ -149,6 +149,11 @@ Commits conventionnels.
   de page « page X sur Y », titre et langue fr-CA dans les métadonnées. Police Noto Sans
   embarquée (licence SIL OFL, `src/export/polices/`), réduite aux caractères latins
   (environ 120 Ko par graisse) : « Nguyễn » et « Łukasz » s'affichent correctement.
+- Boutons d'export : « Exporter cette personne » (PDF, Word) dans la vue Évaluation,
+  « Exporter tout le groupe » (PDF, Word, CSV) dans la vue Groupe, désactivés avec leur
+  raison quand il n'y a rien à exporter. Les rendus sont chargés au premier clic ;
+  « Préparation… » s'affiche pendant la création, sans double clic possible ; un échec
+  affiche un avis. Fichiers nommés par titre et personne (`grille-<titre>-<personne>-<date>`).
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Modifié

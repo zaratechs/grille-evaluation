@@ -141,7 +141,10 @@ const piedDePage = () =>
     ],
   });
 
-async function rendre(titre: string, contenu: (Paragraph | Table)[]): Promise<Uint8Array> {
+async function rendre(
+  titre: string,
+  contenu: (Paragraph | Table)[],
+): Promise<Uint8Array<ArrayBuffer>> {
   const titreStyle = { font: 'Calibri', bold: true, color: MARQUE };
   const doc = new Document({
     title: titre,
@@ -181,7 +184,7 @@ async function rendre(titre: string, contenu: (Paragraph | Table)[]): Promise<Ui
 }
 
 /** Le document Word d'une personne. */
-export function wordPersonne(p: RapportPersonne): Promise<Uint8Array> {
+export function wordPersonne(p: RapportPersonne): Promise<Uint8Array<ArrayBuffer>> {
   return rendre(`${p.titre} — ${p.personne}`, [
     ...enTete(p.titre, p.date),
     ...blocPersonne(p, false),
@@ -189,7 +192,7 @@ export function wordPersonne(p: RapportPersonne): Promise<Uint8Array> {
 }
 
 /** Le document Word du groupe : synthèse, puis une personne par page. */
-export function wordGroupe(g: RapportGroupe): Promise<Uint8Array> {
+export function wordGroupe(g: RapportGroupe): Promise<Uint8Array<ArrayBuffer>> {
   return rendre(`${g.titre} — Groupe`, [
     ...enTete(g.titre, g.date),
     new Paragraph({

@@ -34,6 +34,8 @@ L'application a quatre vues, chacune à sa propre adresse (`#/grille`, `#/evalua
   de boutons radio par critère, avec tous les descripteurs (les flèches du clavier
   changent de niveau), un commentaire par critère et un commentaire général. La note se
   met à jour en direct ; aucune note n'est donnée si les poids ne font pas 100 %.
+- **Exports.** Dans Évaluation, « Exporter cette personne » en PDF ou en Word ; dans
+  Groupe, « Exporter tout le groupe » en PDF, Word ou CSV (pour Excel en français).
 - **Vos données.** Exporter tout ou la grille seule (sans aucun nom), importer un fichier
   .json, télécharger la copie de secours, tout effacer.
 

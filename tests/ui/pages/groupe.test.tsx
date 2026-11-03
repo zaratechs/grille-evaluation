@@ -1,7 +1,35 @@
-import { describe, it, expect } from 'vitest';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { screen, within } from '@testing-library/react';
-import { dossierVide, type Dossier, type Etudiant } from '../../../src/domain';
+import { dossierVide, nomFichier, type Dossier, type Etudiant } from '../../../src/domain';
 import { enregistre, monterApp } from '../outils/monter';
+
+const telecharger = vi.hoisted(() => vi.fn());
+vi.mock('../../../src/data-access/fichiers', async (original) => ({
+  ...(await original<object>()),
+  telecharger,
+}));
+// Les rendus PDF et Word sont testés dans tests/export : ici, seulement les boutons.
+const rendus = vi.hoisted(() => ({
+  pdfPersonne: vi.fn(),
+  pdfGroupe: vi.fn(),
+  wordPersonne: vi.fn(),
+  wordGroupe: vi.fn(),
+}));
+vi.mock('../../../src/export/pdf', () => ({
+  pdfPersonne: rendus.pdfPersonne,
+  pdfGroupe: rendus.pdfGroupe,
+}));
+vi.mock('../../../src/export/word', () => ({
+  wordPersonne: rendus.wordPersonne,
+  wordGroupe: rendus.wordGroupe,
+}));
+beforeEach(() => {
+  telecharger.mockReset();
+  for (const f of Object.values(rendus)) f.mockReset().mockResolvedValue(new Uint8Array([1, 2]));
+});
+const OCTETS = new Uint8Array([1, 2]);
+const TYPE_PDF = 'application/pdf';
+const TYPE_WORD = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
 const bouton = (nom: string, dans: HTMLElement = document.body) =>
   within(dans).getByRole('button', { name: nom });
@@ -171,5 +199,63 @@ describe('Groupe : synthèse', () => {
     monterApp('/groupe', d);
     expect(synthese()).toHaveTextContent('Aucune évaluation complète sur 3.');
     expect(synthese()).not.toHaveTextContent('Moyenne');
+  });
+});
+
+describe('Groupe : exporter tout le groupe', () => {
+  const exports = () => screen.getByRole('group', { name: 'Exporter tout le groupe' });
+
+  it('PDF, Word et CSV', async () => {
+    const { user } = monterApp('/groupe', groupe());
+    await user.click(bouton('PDF', exports()));
+    expect(rendus.pdfGroupe).toHaveBeenCalledWith(
+      expect.objectContaining({ personnes: expect.any(Array) as unknown }),
+    );
+    expect(rendus.pdfGroupe.mock.calls[0]![0].personnes).toHaveLength(3);
+    expect(telecharger).toHaveBeenLastCalledWith(
+      nomFichier('groupe', new Date(), 'pdf'),
+      OCTETS,
+      TYPE_PDF,
+    );
+    await user.click(bouton('Word', exports()));
+    expect(rendus.wordGroupe).toHaveBeenCalledTimes(1);
+    expect(telecharger).toHaveBeenLastCalledWith(
+      nomFichier('groupe', new Date(), 'docx'),
+      OCTETS,
+      TYPE_WORD,
+    );
+  });
+
+  it('CSV : le vrai fichier, avec son BOM et ses trois personnes', async () => {
+    const d = groupe();
+    d.grille.titre = 'Session';
+    const { user } = monterApp('/groupe', d);
+    await user.click(bouton('CSV', exports()));
+    const [nom, contenu, type] = telecharger.mock.lastCall as [string, string, string];
+    expect(nom).toBe(nomFichier('Session groupe', new Date(), 'csv'));
+    expect(type).toBe('text/csv;charset=utf-8');
+    expect(contenu.charCodeAt(0)).toBe(0xfeff);
+    expect(contenu.split('\r\n')).toHaveLength(5); // en-têtes, 3 personnes, fin
+  });
+
+  it('groupe vide : boutons désactivés, avec la raison', () => {
+    monterApp('/groupe');
+    for (const nom of ['PDF', 'Word', 'CSV']) {
+      expect(bouton(nom, exports())).toBeDisabled();
+      expect(bouton(nom, exports())).toHaveAccessibleDescription(
+        'Ajoutez d’abord des personnes étudiantes.',
+      );
+    }
+  });
+
+  it('grille sans critère : boutons désactivés, avec la raison', () => {
+    const d = groupe();
+    d.grille.criteres = [];
+    d.etudiants = d.etudiants.map((e) => ({ ...e, niveaux: {} }));
+    monterApp('/groupe', d);
+    expect(bouton('CSV', exports())).toBeDisabled();
+    expect(bouton('CSV', exports())).toHaveAccessibleDescription(
+      'La grille n’a encore aucun critère.',
+    );
   });
 });

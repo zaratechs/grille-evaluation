@@ -12,8 +12,9 @@ import {
   type Etudiant,
 } from '../../../domain';
 import { pertesEtudiant, phrasesSynthese, texteResultat } from '../../../textes';
-import { Bouton, Champ, Dialogue, FenetreSaisie } from '../../composants';
+import { Bouton, BoutonsExport, Champ, Dialogue, FenetreSaisie } from '../../composants';
 import { useDossier } from '../../etat';
+import { exporterGroupe } from '../../exports';
 import { Vue } from '../../layout';
 import { MESSAGES_ERREUR } from '../../messages';
 
@@ -87,6 +88,18 @@ export function GroupePage() {
     <Vue titre="Groupe">
       <div className="flex flex-col gap-6">
         <Ajout />
+        <BoutonsExport
+          titre="Exporter tout le groupe"
+          formats={['pdf', 'word', 'csv']}
+          exporter={(f) => exporterGroupe(dossier, f)}
+          raison={
+            etudiants.length === 0
+              ? 'Ajoutez d’abord des personnes étudiantes.'
+              : grille.criteres.length === 0
+                ? 'La grille n’a encore aucun critère.'
+                : undefined
+          }
+        />
         {etudiants.length === 0 ? (
           <p className="text-sm text-texte-attenue">
             Aucune personne étudiante pour l’instant. Ajoutez-les une à une : Entrée valide et garde
