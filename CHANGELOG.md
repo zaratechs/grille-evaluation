@@ -191,6 +191,13 @@ Commits conventionnels.
   Boutons, liste des personnes et lien « Évaluer » font au moins 44 px de haut. Le
   tableau du groupe, affiché en cartes, garde des rôles de tableau explicites pour Safari.
   Tests de bout en bout à 320 et 390 px (`tests/e2e/mobile.spec.ts`).
+- Vérification finale de l'accessibilité (`tests/e2e/accessibilite-finale.spec.ts`) :
+  axe (WCAG 2.2 AA) et absence de défilement horizontal sur les six vues, à 1280 px,
+  320 px et en zoom 200 % ; contraste élevé de Windows (contrôles délimités, contour de
+  focus sur chaque arrêt du clavier) ; mouvement réduit ; ordre du focus dans l'ordre
+  visuel, du lien d'évitement au pied de page. Les tests ont été éprouvés en cassant
+  volontairement le focus et la règle de mouvement réduit. Parcours manuel avec NVDA,
+  Firefox et VoiceOver : `docs/verification-accessibilite.md`.
 - Tests des boutons d'export : ils attendent la fin de la création du fichier, et non
   plus seulement le clic (échec en CI : le rendu CSV, chargé par `import()`, n'était pas
   encore prêt sur une machine plus lente).

@@ -151,6 +151,7 @@ src/ui/         interface React
 scripts/        outils (garde de neutralité)
 tests/          tests Vitest (domain, data, scripts, data-access, ui) et Playwright (e2e)
 docs/superpowers/  specs et plans de chaque phase
+docs/verification-accessibilite.md  parcours manuel avec un lecteur d'écran
 ```
 
 ## Déploiement sur Vercel
