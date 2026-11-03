@@ -132,6 +132,11 @@ Commits conventionnels.
   lettres, résultat ou statut (aucune note si l'évaluation est incomplète), une ligne par
   critère (poids, niveau, descripteur du niveau, commentaire), commentaire général,
   synthèse du groupe. La synthèse de la vue Groupe utilise les mêmes phrases.
+- Exports, étape 2 : CSV du groupe pour Excel en français (`src/export/csv.ts`), une ligne
+  par personne : statut, points, total, pourcentage, appréciation, niveau et commentaire de
+  chaque critère, commentaire général. Séparateur « ; », virgule décimale, UTF-8 avec BOM,
+  CRLF, cellules entre guillemets ; aucune note pour une évaluation incomplète ; une
+  cellule qui commencerait une formule (=, +, -, @) est précédée d'une apostrophe.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Modifié
