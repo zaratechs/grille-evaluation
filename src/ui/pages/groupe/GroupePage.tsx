@@ -11,12 +11,11 @@ import {
   type CodeErreur,
   type Etudiant,
 } from '../../../domain';
-import { accorder, pertesEtudiant } from '../../accords';
+import { accorder, pertesEtudiant, texteNote, texteResultat } from '../../../textes';
 import { Bouton, Champ, Dialogue, FenetreSaisie } from '../../composants';
 import { useDossier } from '../../etat';
 import { Vue } from '../../layout';
 import { MESSAGES_ERREUR } from '../../messages';
-import { texteNote, texteResultat } from '../../resultats';
 
 /** Ajouter une personne : le champ se vide et garde le focus, pour enchaîner. */
 function Ajout() {

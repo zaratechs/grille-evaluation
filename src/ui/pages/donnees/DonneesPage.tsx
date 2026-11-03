@@ -9,7 +9,7 @@ import {
   type Import,
 } from '../../../data-access';
 import { dossierVide, nomFichier, ok, type CodeErreur, type Dossier } from '../../../domain';
-import { accorder } from '../../accords';
+import { accorder } from '../../../textes';
 import { Avis, Bouton, Dialogue } from '../../composants';
 import { useDossier } from '../../etat';
 import { Vue } from '../../layout';

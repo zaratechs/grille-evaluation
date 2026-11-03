@@ -5,6 +5,8 @@ import { join, resolve } from 'node:path';
 const SRC = resolve(import.meta.dirname, '../../src');
 const DOMAINE = join(SRC, 'domain');
 const DATA_ACCESS = join(SRC, 'data-access');
+const TEXTES = join(SRC, 'textes');
+const EXPORT = join(SRC, 'export');
 const APP = resolve(import.meta.dirname, '../../app');
 
 /** Le domaine reste pur : ni React, ni navigateur, ni interface, ni stockage. */
@@ -90,6 +92,17 @@ describe('src/domain', () => {
   });
 
   it.each(fichiersTs(DOMAINE))('%s reste pur', (fichier) => {
+    expect(violations(readFileSync(fichier, 'utf8'))).toEqual([]);
+  });
+});
+
+describe('src/textes et src/export', () => {
+  it('src/textes existe et contient des modules', () => {
+    expect(fichiersTs(TEXTES).length).toBeGreaterThan(0);
+  });
+
+  // Mêmes règles que le domaine : les exports et leurs textes se testent sans navigateur.
+  it.each([...fichiersTs(TEXTES), ...fichiersTs(EXPORT)])('%s reste pur', (fichier) => {
     expect(violations(readFileSync(fichier, 'utf8'))).toEqual([]);
   });
 });

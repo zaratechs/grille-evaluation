@@ -131,6 +131,9 @@ Commits conventionnels.
 
 ### Modifié
 
+- Textes du résultat et accords déplacés de `src/ui/` vers `src/textes/`, pour que l'écran
+  et les exports (phase 5) disent exactement la même chose ; ajout de la date en lettres
+  (« 1er novembre 2026 »). Couverture de 100 % sur `src/textes/`.
 - Icône de l'onglet : `valse-1.png` remplace `favicon.svg`.
 
 ### Retiré

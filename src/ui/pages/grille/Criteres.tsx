@@ -15,7 +15,7 @@ import {
   type Critere,
   type Dossier,
 } from '../../../domain';
-import { phrasesPertes } from '../../accords';
+import { phrasesPertes } from '../../../textes';
 import { Bouton, ChampDossier, Dialogue } from '../../composants';
 import { useDossier } from '../../etat';
 

@@ -115,6 +115,7 @@ src/domain/     cœur métier en TypeScript pur (sans React ni navigateur), API 
 src/data/       les 25 modèles de grilles de Paulo Mendonça
 src/data-access/  seul accès au navigateur : sauvegarde, autres onglets, export et import
                   JSON, fichiers, identifiants
+src/textes/     textes en français partagés par l'écran et les exports (résultats, accords, dates)
 src/ui/         interface React
   tokens.css      couleurs et formes (seul fichier avec des couleurs en dur)
   etat/           le dossier (chargé, enregistré à chaque modification), avis, personne choisie

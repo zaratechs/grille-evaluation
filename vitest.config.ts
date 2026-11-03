@@ -20,7 +20,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'node',
-          include: ['tests/{domain,data,scripts}/**/*.{test,spec}.{mjs,ts}'],
+          include: ['tests/{domain,data,scripts,textes,export}/**/*.{test,spec}.{mjs,ts}'],
           environment: 'node',
           pool: 'threads',
         },
@@ -45,6 +45,7 @@ export default defineConfig({
       thresholds: {
         'src/domain/**': { lines: 100, functions: 100, statements: 100, branches: 100 },
         'src/data-access/**': { lines: 100, functions: 100, statements: 100, branches: 100 },
+        'src/textes/**': { lines: 100, functions: 100, statements: 100, branches: 100 },
         // Décision 6 de la phase 4 : l'interface est testée par ses usages, pas ligne à ligne.
         'src/ui/**': { lines: 90, functions: 90, statements: 90, branches: 90 },
       },

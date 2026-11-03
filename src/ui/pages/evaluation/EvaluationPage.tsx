@@ -10,11 +10,10 @@ import {
   type Critere,
   type Etudiant,
 } from '../../../domain';
-import { pertesEtudiant } from '../../accords';
+import { pertesEtudiant, texteResultat } from '../../../textes';
 import { Bouton, Champ, Dialogue } from '../../composants';
 import { useDossier, useSelection } from '../../etat';
 import { Vue } from '../../layout';
-import { texteResultat } from '../../resultats';
 
 const STYLE_LIEN = 'font-medium text-marque-700 underline hover:text-marque-800';
 

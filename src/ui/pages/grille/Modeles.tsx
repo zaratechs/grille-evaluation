@@ -12,7 +12,7 @@ import {
   type Dossier,
   type Modele,
 } from '../../../domain';
-import { accorder, phrasesPertes } from '../../accords';
+import { accorder, phrasesPertes } from '../../../textes';
 import { Bouton, Champ, ChampDossier, Dialogue, Fenetre, FenetreSaisie } from '../../composants';
 import { useDossier } from '../../etat';
 

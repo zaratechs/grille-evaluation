@@ -9,7 +9,7 @@ import {
 } from '../../../domain';
 import { Bouton, ChampDossier, Dialogue } from '../../composants';
 import { useDossier } from '../../etat';
-import { phrasesPertes } from '../../accords';
+import { phrasesPertes } from '../../../textes';
 import { MESSAGES_ERREUR } from '../../messages';
 
 /** Ce que retirer le dernier niveau effacerait : évaluations à ce niveau, descripteurs rédigés. */
