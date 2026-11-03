@@ -108,6 +108,13 @@ Commits conventionnels.
   commentaire). Tableau avec l'état de chaque évaluation (note, incomplète, pas encore
   évaluée, note impossible si les poids ne font pas 100 %), lien « Évaluer », et
   synthèse : évaluations complètes, moyenne et médiane.
+- Vue Évaluation : une personne à la fois (liste déroulante, « Précédente » et
+  « Suivante », position « 2 / 24 »), gardée quand on change de vue. Un groupe de
+  boutons radio par critère, avec ses descripteurs ; les flèches du clavier changent de
+  niveau. Résultat en direct, annoncé poliment, avec un lien vers la Grille si les poids
+  ne font pas 100 % ; un critère de poids 0 est « non noté ». Commentaire par critère,
+  commentaire général, et « Effacer l'évaluation de cette personne » avec confirmation.
+  Sans personne ou sans critère, la vue mène au Groupe ou à la Grille.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Retiré

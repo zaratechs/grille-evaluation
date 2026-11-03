@@ -1,3 +1,5 @@
+import type { Etudiant } from '../domain';
+
 /** « 1 évaluation sera effacée. » / « 3 évaluations seront effacées. » */
 export const accorder = (n: number, un: string, plusieurs: string): string =>
   `${n} ${n > 1 ? plusieurs : un}`;
@@ -18,3 +20,12 @@ export function phrasesPertes(pertes: {
       accorder(descripteurs, 'descripteur sera effacé.', 'descripteurs seront effacés.'),
   ].filter((p): p is string => p !== false);
 }
+
+/** Ce qu'effacer l'évaluation de cette personne (ou la retirer) ferait perdre. */
+export const pertesEtudiant = (e: Etudiant): string[] =>
+  phrasesPertes({
+    evaluations: Object.keys(e.niveaux).length,
+    commentaires:
+      Object.values(e.commentaires).filter((c) => c.trim() !== '').length +
+      (e.commentaireGeneral.trim() !== '' ? 1 : 0),
+  });

@@ -11,21 +11,12 @@ import {
   type CodeErreur,
   type Etudiant,
 } from '../../../domain';
-import { accorder, phrasesPertes } from '../../accords';
+import { accorder, pertesEtudiant } from '../../accords';
 import { Bouton, Champ, Dialogue, FenetreSaisie } from '../../composants';
 import { useDossier } from '../../etat';
 import { Vue } from '../../layout';
 import { MESSAGES_ERREUR } from '../../messages';
 import { texteNote, texteResultat } from '../../resultats';
-
-/** Ce que retirer cette personne effacerait. */
-const pertes = (e: Etudiant) =>
-  phrasesPertes({
-    evaluations: Object.keys(e.niveaux).length,
-    commentaires:
-      Object.values(e.commentaires).filter((c) => c.trim() !== '').length +
-      (e.commentaireGeneral.trim() !== '' ? 1 : 0),
-  });
 
 /** Ajouter une personne : le champ se vide et garde le focus, pour enchaîner. */
 function Ajout() {
@@ -158,7 +149,7 @@ export function GroupePage() {
                         <Bouton
                           variante="danger"
                           onClick={() => {
-                            const p = pertes(e);
+                            const p = pertesEtudiant(e);
                             if (p.length === 0) enleve(e);
                             else setRetirer({ etudiant: e, pertes: p });
                           }}
