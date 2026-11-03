@@ -5,15 +5,16 @@ import {
   type Grille,
   type Note,
   type ResultatNote,
+  type SyntheseGroupe,
 } from '../domain';
 import { accorder } from './accords';
 
 /** 20 → « 20 », 20,5 → « 20,5 » : le total de points de la grille. */
-const total = (grille: Grille) => String(grille.totalPoints).replace('.', ',');
+export const texteTotal = (grille: Grille): string => String(grille.totalPoints).replace('.', ',');
 
 /** « 16,00 / 20 points (80,0 %) » */
 export const texteNote = (grille: Grille, n: Note): string =>
-  `${formaterPoints(n.points)} / ${total(grille)} points (${formaterPourcentage(n.pourcentage)})`;
+  `${formaterPoints(n.points)} / ${texteTotal(grille)} points (${formaterPourcentage(n.pourcentage)})`;
 
 /** Le résultat d'une personne, pour chacun des quatre statuts du domaine. */
 export function texteResultat(grille: Grille, r: ResultatNote): string {
@@ -29,8 +30,18 @@ export function texteResultat(grille: Grille, r: ResultatNote): string {
         r.evalues > 1 ? 'évalués' : 'évalué'
       }`;
     case 'complete':
-      return `${formaterPoints(r.points)} / ${total(grille)} points · ${formaterPourcentage(
+      return `${formaterPoints(r.points)} / ${texteTotal(grille)} points · ${formaterPourcentage(
         r.pourcentage,
       )} · ${r.appreciation.libelle}`;
   }
+}
+
+/** « 2 évaluations complètes sur 4 », moyenne et médiane ; ou « Aucune évaluation complète sur 4. » */
+export function phrasesSynthese(grille: Grille, s: SyntheseGroupe): string[] {
+  if (!s.moyenne || !s.mediane) return [`Aucune évaluation complète sur ${s.total}.`];
+  return [
+    `${accorder(s.completes, 'évaluation complète', 'évaluations complètes')} sur ${s.total}`,
+    `Moyenne : ${texteNote(grille, s.moyenne)}`,
+    `Médiane : ${texteNote(grille, s.mediane)}`,
+  ];
 }

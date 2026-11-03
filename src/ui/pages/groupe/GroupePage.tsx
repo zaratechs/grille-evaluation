@@ -11,7 +11,7 @@ import {
   type CodeErreur,
   type Etudiant,
 } from '../../../domain';
-import { accorder, pertesEtudiant, texteNote, texteResultat } from '../../../textes';
+import { pertesEtudiant, phrasesSynthese, texteResultat } from '../../../textes';
 import { Bouton, Champ, Dialogue, FenetreSaisie } from '../../composants';
 import { useDossier } from '../../etat';
 import { Vue } from '../../layout';
@@ -55,24 +55,21 @@ function Ajout() {
 
 function Synthese() {
   const { dossier } = useDossier();
-  const s = synthese(dossier);
+  const phrases = phrasesSynthese(dossier.grille, synthese(dossier));
   const id = useId();
-  const { grille } = dossier;
   return (
     <section aria-labelledby={id} className="rounded-carte bg-surface-attenue p-4 text-sm">
       <h2 id={id} className="font-semibold text-texte">
         Synthèse du groupe
       </h2>
-      {s.moyenne && s.mediane ? (
+      {phrases.length > 1 ? (
         <ul className="mt-1 text-texte">
-          <li>
-            {accorder(s.completes, 'évaluation complète', 'évaluations complètes')} sur {s.total}
-          </li>
-          <li>Moyenne : {texteNote(grille, s.moyenne)}</li>
-          <li>Médiane : {texteNote(grille, s.mediane)}</li>
+          {phrases.map((p) => (
+            <li key={p}>{p}</li>
+          ))}
         </ul>
       ) : (
-        <p className="mt-1 text-texte">Aucune évaluation complète sur {s.total}.</p>
+        <p className="mt-1 text-texte">{phrases[0]}</p>
       )}
     </section>
   );

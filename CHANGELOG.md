@@ -127,6 +127,11 @@ Commits conventionnels.
   avis ; aucune barre de défilement horizontale à 320 px de large.
 - Seuil de couverture de 90 % sur l'interface (`src/ui/**`).
 - README : section « Utilisation » (les quatre vues) et organisation de `src/ui/`.
+- Exports, étape 1 : contenu des documents d'une personne et du groupe
+  (`src/export/contenu.ts`), déjà en texte et identique à l'écran : en-tête, date en
+  lettres, résultat ou statut (aucune note si l'évaluation est incomplète), une ligne par
+  critère (poids, niveau, descripteur du niveau, commentaire), commentaire général,
+  synthèse du groupe. La synthèse de la vue Groupe utilise les mêmes phrases.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Modifié
