@@ -121,7 +121,17 @@ Commits conventionnels.
   réparation ; un fichier refusé affiche son message et ne change rien. Téléchargement de
   la copie de secours quand il y en a une. « Tout effacer… » avec confirmation.
   `lireCopie()` ajoutée à l'accès aux données.
+- Tests de bout en bout : un parcours entièrement au clavier (partir d'un modèle, ajuster
+  la grille, ajouter deux personnes, en évaluer une, recharger, exporter, tout effacer et
+  réimporter) ; scan axe des quatre vues remplies, avec une fenêtre ouverte et avec un
+  avis ; aucune barre de défilement horizontale à 320 px de large.
+- Seuil de couverture de 90 % sur l'interface (`src/ui/**`).
+- README : section « Utilisation » (les quatre vues) et organisation de `src/ui/`.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
+
+### Modifié
+
+- Icône de l'onglet : `valse-1.png` remplace `favicon.svg`.
 
 ### Retiré
 
