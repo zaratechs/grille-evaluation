@@ -182,6 +182,9 @@ Commits conventionnels.
   Claude Code (codage, TDD, intégration continue, revue de code) et logo ; données gardées
   dans le navigateur ; contenus (modèles de Paulo Mendonça, police Noto Sans) ; lien vers
   les signalements GitHub. Aucun courriel.
+- Encadré « Pour commencer » sur la vue Grille, tant qu'elle n'a aucun critère : trois
+  étapes numérotées, avec des liens vers Groupe, Évaluation et Vos données. Les boutons
+  de la vue sont nommés sans être dupliqués, pour ne pas gêner le pilotage à la voix.
 - Tests des boutons d'export : ils attendent la fin de la création du fichier, et non
   plus seulement le clic (échec en CI : le rendu CSV, chargé par `import()`, n'était pas
   encore prêt sur une machine plus lente).

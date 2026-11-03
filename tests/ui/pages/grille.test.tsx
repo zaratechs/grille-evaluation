@@ -252,3 +252,41 @@ describe('Grille : critères', () => {
     expect(enregistre().etudiants[0]?.niveaux).toEqual({});
   });
 });
+
+describe('Grille : « Pour commencer »', () => {
+  const encadre = () => screen.getByRole('region', { name: 'Pour commencer' });
+
+  it('grille vide : trois étapes numérotées, avec les noms des boutons de la vue', () => {
+    monterApp('/grille');
+    const etapes = within(within(encadre()).getByRole('list')).getAllByRole('listitem');
+    expect(etapes).toHaveLength(3);
+    expect(etapes[0]).toHaveTextContent('Construisez la grille');
+    expect(etapes[0]).toHaveTextContent('« Partir d’un modèle… »');
+    expect(etapes[0]).toHaveTextContent('« Ajouter un critère »');
+    expect(etapes[1]).toHaveTextContent('Ajoutez vos personnes étudiantes');
+    expect(etapes[2]).toHaveTextContent('Évaluez');
+    expect(etapes[2]).toHaveTextContent('PDF, Word ou CSV');
+    expect(encadre().querySelector('ol')).not.toBeNull();
+  });
+
+  it('des liens vers Groupe, Évaluation et Vos données ; aucun bouton en double', () => {
+    monterApp('/grille');
+    const lien = (nom: string) => within(encadre()).getByRole('link', { name: nom });
+    expect(lien('Groupe')).toHaveAttribute('href', '/groupe');
+    expect(lien('Évaluation')).toHaveAttribute('href', '/evaluation');
+    expect(lien('Vos données')).toHaveAttribute('href', '/donnees');
+    expect(within(encadre()).queryByRole('button')).toBeNull();
+    expect(encadre()).toHaveTextContent('Tout est enregistré automatiquement dans ce navigateur.');
+  });
+
+  it('disparaît dès le premier critère', async () => {
+    const { user } = monterApp('/grille');
+    await user.click(bouton('Ajouter un critère'));
+    expect(screen.queryByRole('region', { name: 'Pour commencer' })).toBeNull();
+  });
+
+  it('absent quand la grille a des critères', () => {
+    monterApp('/grille', dossierA(5));
+    expect(screen.queryByRole('region', { name: 'Pour commencer' })).toBeNull();
+  });
+});

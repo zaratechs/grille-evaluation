@@ -23,6 +23,9 @@ et Word arrivent à la phase 5 (voir `docs/superpowers/specs/`).
 L'application a quatre vues, chacune à sa propre adresse (`#/grille`, `#/evaluation`,
 `#/groupe`, `#/donnees`).
 
+- **Pour commencer.** Tant que la grille n'a aucun critère, un encadré en haut de la vue
+  Grille donne les trois étapes : construire la grille, ajouter les personnes, évaluer et
+  exporter.
 - **Grille.** Titre et total de points ; partir d'un des 25 modèles fournis ou d'un de vos
   modèles, et enregistrer la grille comme modèle. Niveaux (de 3 à 10), puis une carte par
   critère : nom, poids, un descripteur par niveau. Le total des poids est affiché ;
