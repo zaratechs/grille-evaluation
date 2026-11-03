@@ -7,5 +7,10 @@ export default defineConfig({
   base: './',
   plugins: [react(), tailwindcss()],
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
-  build: { outDir: 'dist' },
+  build: {
+    outDir: 'dist',
+    // Le rendu PDF (police embarquée comprise, environ 755 Ko) n'est chargé qu'au premier
+    // export : il ne pèse pas sur le premier affichage.
+    chunkSizeWarningLimit: 800,
+  },
 });

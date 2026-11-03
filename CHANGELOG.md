@@ -154,6 +154,12 @@ Commits conventionnels.
   raison quand il n'y a rien à exporter. Les rendus sont chargés au premier clic ;
   « Préparation… » s'affiche pendant la création, sans double clic possible ; un échec
   affiche un avis. Fichiers nommés par titre et personne (`grille-<titre>-<personne>-<date>`).
+- Exports, tests de bout en bout sur le site construit : chaque fichier se télécharge avec
+  son nom et un contenu valide (PDF, Word, CSV avec BOM), aucun rendu n'est chargé avant
+  le clic, aucune violation axe pendant « Préparation… ». README : section « Exports » et
+  crédit de la police ; page Transparence : mention de la police et de sa licence.
+- Build : le seuil d'avertissement de taille est relevé à 800 Ko, le rendu PDF (police
+  comprise, environ 755 Ko) n'étant chargé qu'au premier export.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Modifié

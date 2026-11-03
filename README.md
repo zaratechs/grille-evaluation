@@ -78,6 +78,18 @@ fait au clavier, et chaque vue s'affiche sans défilement horizontal dès 320 px
 - **Remise à zéro.** « Tout effacer… », après confirmation, ne supprime que les clés
   `grille-evaluation:*`.
 
+## Exports
+
+- **Une personne** (vue Évaluation) : PDF ou Word. **Tout le groupe** (vue Groupe) : PDF ou
+  Word, avec la synthèse en première page puis une personne par page, ou CSV pour Excel en
+  français (séparateur `;`, une ligne par personne).
+- **Mise en page** : Lettre US portrait, marges de 2 cm, pied de page « page X sur Y ».
+- **Évaluation incomplète** : exportée avec son statut, jamais avec une note.
+- **Tout reste dans le navigateur** : les fichiers sont créés sur place, sans serveur. Les
+  bibliothèques (jsPDF, docx) ne sont chargées qu'au premier export.
+- **CSV et Excel** : une cellule qui commence par `=`, `+`, `-` ou `@` est précédée d'une
+  apostrophe, pour qu'Excel ne l'exécute jamais comme une formule.
+
 ## Prérequis
 
 - Node.js 22.12 ou plus récent (`.nvmrc` : 22, la version utilisée par la CI).
@@ -148,3 +160,5 @@ Licence **CC BY-NC-SA 4.0** (voir `LICENSE`).
 - Outil d'origine et modèles de grilles : **Paulo Mendonça**, Conseiller pédagogique TIC.
 - Conception et développement de cette application : **Réda Hamza**, Développeur
   technopédagogique.
+- Police des PDF : **Noto Sans** (The Noto Project Authors), licence SIL Open Font
+  License 1.1 (voir `src/export/polices/OFL.txt`), réduite aux caractères latins.
