@@ -178,6 +178,13 @@ Commits conventionnels.
   hors des champs désactivés).
 - Synthèse du groupe (écran, PDF, Word) : « Note impossible : les poids font … » quand
   les poids ne font pas 100 %, au lieu de « Aucune évaluation complète ».
+- Page Transparence complète, en quatre sections : développement avec l'assistance de
+  Claude Code (codage, TDD, intégration continue, revue de code) et logo ; données gardées
+  dans le navigateur ; contenus (modèles de Paulo Mendonça, police Noto Sans) ; lien vers
+  les signalements GitHub. Aucun courriel.
+- Tests des boutons d'export : ils attendent la fin de la création du fichier, et non
+  plus seulement le clic (échec en CI : le rendu CSV, chargé par `import()`, n'était pas
+  encore prêt sur une machine plus lente).
 
 ### Retiré
 

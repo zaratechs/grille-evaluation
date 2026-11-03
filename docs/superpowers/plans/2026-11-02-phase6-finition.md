@@ -68,13 +68,13 @@ feat(evaluation): retirer un niveau, naviguer en lecture seule, synthèse sans n
 ## Tâche 3 — Page Transparence complète
 
 1. **Rouge** : `tests/ui/pages/transparence.test.tsx` :
-   - un `h1` et cinq sections titrées : « Développement de cet outil », « Vos données
-     restent dans votre navigateur », « Contenus », « À propos de l'IA utilisée »,
-     « Signaler une erreur » ;
-   - phrases clés : Claude Code ; logo généré avec Nano Banana 2 de Gemini ; clé
-     `grille-evaluation:*` ; rien n'est envoyé à un serveur ; aucun témoin ni mesure
-     d'audience ; Loi 25 ; « l'auteur conserve l'entière responsabilité du contenu
-     final » ; Paulo Mendonça ; Noto Sans et SIL Open Font License 1.1 ;
+   - un `h1` et quatre sections titrées : « Développement de cet outil », « Vos données
+     restent dans votre navigateur », « Contenus », « Signaler une erreur » ;
+   - phrases clés : Claude Code (codage, TDD, intégration continue, revue de code) ;
+     validation par l'auteur ; logo généré avec Nano Banana 2 de Gemini ; rien n'est
+     envoyé à un serveur ; aucun témoin ni mesure d'audience ; « l'auteur conserve
+     l'entière responsabilité du contenu final » ; Paulo Mendonça ; Noto Sans et SIL Open
+     Font License 1.1 ; aucune mention d'IA locale ni de la Loi 25 ;
    - lien « Vos données » vers `/donnees` ; lien des signalements vers
      `https://github.com/zaratechs/grille-evaluation/issues`, nouvel onglet annoncé ;
    - aucun `mailto:` ni adresse courriel dans la page (garde aussi dans

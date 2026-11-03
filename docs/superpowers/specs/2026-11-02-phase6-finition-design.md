@@ -150,9 +150,12 @@ Validées par Réda le 2026-11-02.
 
 1. **Transparence, développement** : « Grille d'évaluation est conçue avec Claude Code. »
    Le logo a été généré avec l'outil d'IA Nano Banana 2 de Gemini.
-2. **Transparence, IA utilisée** : le texte des autres pages Transparence de Réda est
-   repris tel quel (IA locale conçue par l'auteur, conforme à la Loi 25, l'auteur conserve
-   l'entière responsabilité du contenu final).
+2. **Transparence, IA utilisée** (révisée le 2026-11-02) : aucune mention d'IA locale ni
+   de la Loi 25. « Développement de cet outil » dit que Claude Code a assisté le codage,
+   le TDD, l'intégration continue et la revue de code, que chaque étape a été validée par
+   l'auteur, et se termine par « l'auteur conserve l'entière responsabilité du contenu
+   final ». La section « À propos de l'IA utilisée » disparaît : la page compte quatre
+   sections.
 3. **Signaler une erreur** : le dépôt `zaratechs/grille-evaluation` sera public ; lien vers
    ses signalements (`/issues`), qui s'ouvre dans un nouvel onglet.
 4. **Aide** : encadré « Pour commencer » sur la vue Grille vide, pas de page d'aide.
