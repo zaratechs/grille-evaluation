@@ -23,7 +23,7 @@
     "ci": "npm run lint && npm run typecheck && npm run check:neutralite && npm run audit && npm run test:coverage && npm run build && npm run test:e2e"
   },
   "dependencies": {
-    "docx": "9.7.1",
+    "docx": "9.13.0",
     "jspdf": "4.2.1",
     "jspdf-autotable": "5.0.9",
     "react": "^19.2.8",
