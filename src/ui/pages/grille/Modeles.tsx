@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type FormEvent } from 'react';
+import { useId, useRef, useState } from 'react';
 import { nouvelId } from '../../../data-access';
 import { AUTEUR_MODELES, LICENCE_MODELES, MODELES_FOURNIS } from '../../../data/modeles';
 import {
@@ -13,9 +13,8 @@ import {
   type Modele,
 } from '../../../domain';
 import { accorder, phrasesPertes } from '../../accords';
-import { Bouton, Champ, ChampDossier, Dialogue, Fenetre } from '../../composants';
+import { Bouton, Champ, ChampDossier, Dialogue, Fenetre, FenetreSaisie } from '../../composants';
 import { useDossier } from '../../etat';
-import { MESSAGES_ERREUR } from '../../messages';
 
 type Choix = { perso: boolean; id: string };
 
@@ -258,41 +257,21 @@ function ChoisirModele({
 
 function EnregistrerModele({ fermer }: { fermer: () => void }) {
   const { modifier } = useDossier();
-  const [nom, setNom] = useState('');
-  const [message, setMessage] = useState<string | undefined>();
-  const champ = useRef<HTMLInputElement>(null);
-
-  const valider = (e: FormEvent) => {
-    e.preventDefault();
-    const id = nouvelId();
-    const r = modifier((d) => enregistrerModele(d, id, nom));
-    if (r.ok) fermer();
-    else setMessage(MESSAGES_ERREUR[r.erreur]);
-  };
-
   return (
-    <Fenetre ouvert titre="Enregistrer comme modèle" surFermer={fermer} focusInitial={champ}>
-      <form onSubmit={valider} className="flex flex-col gap-3">
-        <p className="text-sm text-texte-attenue">
-          Les niveaux, les critères, leurs poids et leurs descripteurs sont enregistrés, sans les
-          personnes étudiantes ni leurs évaluations.
-        </p>
-        <Champ
-          etiquette="Nom du modèle"
-          valeur={nom}
-          surSaisie={(texte) => {
-            setNom(texte);
-            setMessage(undefined);
-          }}
-          erreur={message}
-          refChamp={champ}
-        />
-        <div>
-          <Bouton type="submit" variante="principal">
-            Enregistrer
-          </Bouton>
-        </div>
-      </form>
-    </Fenetre>
+    <FenetreSaisie
+      titre="Enregistrer comme modèle"
+      etiquette="Nom du modèle"
+      valider="Enregistrer"
+      fermer={fermer}
+      surValider={(nom) => {
+        const id = nouvelId();
+        return modifier((d) => enregistrerModele(d, id, nom));
+      }}
+    >
+      <p className="text-sm text-texte-attenue">
+        Les niveaux, les critères, leurs poids et leurs descripteurs sont enregistrés, sans les
+        personnes étudiantes ni leurs évaluations.
+      </p>
+    </FenetreSaisie>
   );
 }

@@ -102,6 +102,12 @@ Commits conventionnels.
   confirmation qui dit ce qui sera remplacé et effacé. « Enregistrer comme modèle… »,
   renommer et supprimer (avec confirmation) un modèle personnel. Fenêtre modale
   générique ; Échap dans une confirmation ouverte par-dessus ne ferme qu'elle.
+- Vue Groupe : ajouter des personnes à la suite (Entrée valide, le champ se vide et garde
+  le focus ; nom vide ou déjà pris refusé avec son message), renommer dans une fenêtre,
+  monter, descendre, retirer (avec confirmation si la personne a une évaluation ou un
+  commentaire). Tableau avec l'état de chaque évaluation (note, incomplète, pas encore
+  évaluée, note impossible si les poids ne font pas 100 %), lien « Évaluer », et
+  synthèse : évaluations complètes, moyenne et médiane.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Retiré
