@@ -143,6 +143,12 @@ Commits conventionnels.
   des critères avec en-tête répété et lignes insécables, pied de page « page X sur Y ».
   Groupe : synthèse et tableau des résultats, puis une personne par page. Couleurs des
   documents tirées des jetons (`src/export/couleurs.ts`), vérifiées par un test.
+- Exports, étape 4 : PDF d'une personne et du groupe (`src/export/pdf.ts`, dépendances
+  `jspdf` 4.2.1 et `jspdf-autotable` 5.0.9). Même hiérarchie que le Word, Lettre US, marges
+  de 2 cm, tableau des critères à en-tête répété sans ligne coupée entre deux pages, pied
+  de page « page X sur Y », titre et langue fr-CA dans les métadonnées. Police Noto Sans
+  embarquée (licence SIL OFL, `src/export/polices/`), réduite aux caractères latins
+  (environ 120 Ko par graisse) : « Nguyễn » et « Łukasz » s'affichent correctement.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Modifié
