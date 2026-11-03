@@ -64,8 +64,11 @@ test('construire, évaluer, recharger, exporter puis réimporter', async ({ page
     // Les critères : chaque groupe est intitulé « Nom · 20,0 % ».
     const groupe = page.getByRole('group', { name: / · / }).nth(i);
     await groupe.getByRole('radio', { name: '2 Faible' }).focus();
+    // Après chaque touche, on attend que la page ait suivi avant la suivante.
     await page.keyboard.press('Space');
+    await expect(groupe.getByRole('radio', { name: '2 Faible' })).toBeChecked();
     await page.keyboard.press('ArrowDown');
+    await expect(groupe.getByRole('radio', { name: '3 Satisfaisant' })).toBeChecked();
     await page.keyboard.press('ArrowDown');
     await expect(groupe.getByRole('radio', { name: '4 Très bon' })).toBeChecked();
   }

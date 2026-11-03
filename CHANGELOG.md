@@ -137,6 +137,12 @@ Commits conventionnels.
   chaque critère, commentaire général. Séparateur « ; », virgule décimale, UTF-8 avec BOM,
   CRLF, cellules entre guillemets ; aucune note pour une évaluation incomplète ; une
   cellule qui commencerait une formule (=, +, -, @) est précédée d'une apostrophe.
+- Exports, étape 3 : document Word d'une personne et du groupe (`src/export/word.ts`,
+  dépendance `docx` 9.7.1). Lettre US, marges de 2 cm, Calibri 11, titre de la grille en
+  Titre 1 et chaque personne en Titre 2, titres de section soulignés d'un filet, tableau
+  des critères avec en-tête répété et lignes insécables, pied de page « page X sur Y ».
+  Groupe : synthèse et tableau des résultats, puis une personne par page. Couleurs des
+  documents tirées des jetons (`src/export/couleurs.ts`), vérifiées par un test.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Modifié

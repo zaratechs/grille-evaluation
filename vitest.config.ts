@@ -48,6 +48,8 @@ export default defineConfig({
         'src/textes/**': { lines: 100, functions: 100, statements: 100, branches: 100 },
         'src/export/contenu.ts': { lines: 100, functions: 100, statements: 100, branches: 100 },
         'src/export/csv.ts': { lines: 100, functions: 100, statements: 100, branches: 100 },
+        'src/export/couleurs.ts': { lines: 100, functions: 100, statements: 100, branches: 100 },
+        'src/export/word.ts': { lines: 90, functions: 90, statements: 90, branches: 90 },
         // Décision 6 de la phase 4 : l'interface est testée par ses usages, pas ligne à ligne.
         'src/ui/**': { lines: 90, functions: 90, statements: 90, branches: 90 },
       },

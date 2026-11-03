@@ -116,7 +116,7 @@ src/data/       les 25 modèles de grilles de Paulo Mendonça
 src/data-access/  seul accès au navigateur : sauvegarde, autres onglets, export et import
                   JSON, fichiers, identifiants
 src/textes/     textes en français partagés par l'écran et les exports (résultats, accords, dates)
-src/export/     exports : contenu des documents, CSV (PDF et Word à venir), sans navigateur
+src/export/     exports : contenu des documents, CSV, Word (PDF à venir), sans navigateur
 src/ui/         interface React
   tokens.css      couleurs et formes (seul fichier avec des couleurs en dur)
   etat/           le dossier (chargé, enregistré à chaque modification), avis, personne choisie

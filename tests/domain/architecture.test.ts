@@ -12,7 +12,8 @@ const APP = resolve(import.meta.dirname, '../../app');
 /** Le domaine reste pur : ni React, ni navigateur, ni interface, ni stockage. */
 const IMPORTS_INTERDITS =
   /(?:from\s+|import\s*\(\s*)['"](react|react-dom|react-router)(?:\/[^'"]*)?['"]|['"][^'"]*\b(ui|data-access)(?:\/[^'"]*)?['"]/;
-const GLOBAUX_INTERDITS = /\b(window|document|localStorage|sessionStorage|navigator)\b/;
+// Un nom suivi de « : » est une clé d'objet (`document:` dans les options de docx), pas le global.
+const GLOBAUX_INTERDITS = /\b(window|document|localStorage|sessionStorage|navigator)\b(?!\s*:)/;
 
 /** Seul `src/data-access/` parle au stockage et aux fichiers du navigateur. */
 const API_STOCKAGE = /\b(localStorage|sessionStorage|Blob|FileReader|createObjectURL)\b/;
@@ -58,6 +59,11 @@ describe('détecteur de violations du domaine', () => {
       expect(violations(source)).toContain('global du navigateur');
     },
   );
+
+  it('laisse passer une clé d’objet du même nom, mais pas le global', () => {
+    expect(violations('const options = { document: { run: {} } };')).toEqual([]);
+    expect(violations('const t = document.title;')).toContain('global du navigateur');
+  });
 
   it('laisse passer un module pur et les mentions en commentaire', () => {
     const source = [
