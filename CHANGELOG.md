@@ -160,6 +160,10 @@ Commits conventionnels.
   crédit de la police ; page Transparence : mention de la police et de sa licence.
 - Build : le seuil d'avertissement de taille est relevé à 800 Ko, le rendu PDF (police
   comprise, environ 755 Ko) n'étant chargé qu'au premier export.
+- En-têtes de sécurité dans `vercel.json` : politique de sécurité stricte (fichiers du
+  site seulement, sans script en ligne ni `eval`, sans intégration dans un autre site),
+  `nosniff`, aucun référent, caméra, micro et géolocalisation fermés. Testés sur toutes
+  les vues, les exports PDF, Word et CSV, l'import JSON et la copie de secours.
 - README, CHANGELOG et LICENSE (CC BY-NC-SA 4.0).
 
 ### Modifié

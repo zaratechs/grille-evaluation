@@ -153,6 +153,14 @@ docs/superpowers/  specs et plans de chaque phase
 Le routage par hash (`#/transparence`) évite toute règle de réécriture côté serveur : le
 `dist/` peut aussi être servi par n'importe quel hébergement statique.
 
+**En-têtes de sécurité.** `vercel.json` ne contient que les en-têtes envoyés avec chaque
+page. La politique de sécurité (`Content-Security-Policy`) n'autorise que les fichiers du
+site lui-même : aucun script, style, police ou envoi vers un autre domaine, aucun script
+en ligne ni `eval`, aucune intégration dans un autre site. S'y ajoutent `nosniff`, aucun
+référent transmis, et caméra, micro et géolocalisation fermés. Un test de bout en bout
+rejoue toutes les vues, les exports, l'import et la copie de secours sous ces en-têtes
+exacts (`tests/e2e/securite.spec.ts`). Sur un autre hébergement, reprendre les mêmes.
+
 ## Licence et crédits
 
 Licence **CC BY-NC-SA 4.0** (voir `LICENSE`).
