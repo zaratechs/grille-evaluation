@@ -72,29 +72,38 @@ function Evaluation() {
 
   const pertes = pertesEtudiant(e);
 
-  // La navigation ne modifie rien : hors des champs de la vue, elle reste active en lecture seule.
-  const navigation = (
-    <div className="flex flex-wrap items-end gap-2">
-      <div className="min-w-0 flex-1 sm:max-w-sm">
-        <label htmlFor={idChoix} className="block text-sm font-medium text-texte">
-          Personne
-        </label>
-        <select
-          id={idChoix}
-          value={e.id}
-          onChange={(ev) => aller(etudiants.findIndex((x) => x.id === ev.target.value))}
-          className="mt-1 block w-full rounded-champ border border-bordure-champ bg-surface px-2 py-1.5 text-sm text-texte focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus"
-        >
-          {etudiants.map((x) => (
-            <option key={x.id} value={x.id}>
-              {x.nom}
-            </option>
-          ))}
-        </select>
-      </div>
+  const choix = (
+    <div className="sm:max-w-sm">
+      <label htmlFor={idChoix} className="block text-sm font-medium text-texte">
+        Personne
+      </label>
+      <select
+        id={idChoix}
+        value={e.id}
+        onChange={(ev) => aller(etudiants.findIndex((x) => x.id === ev.target.value))}
+        className="mt-1 block w-full rounded-champ border border-bordure-champ bg-surface px-2 py-1.5 text-sm text-texte focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus max-[480px]:min-h-11"
+      >
+        {etudiants.map((x) => (
+          <option key={x.id} value={x.id}>
+            {x.nom}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+
+  const barre = (
+    <div
+      role="group"
+      aria-label="Changer de personne"
+      className="flex items-center gap-2 max-[480px]:justify-between"
+    >
       <Bouton ref={precedente} disabled={position === 0} onClick={() => aller(position - 1)}>
         Précédente
       </Bouton>
+      <p className="text-sm text-texte-attenue">
+        {position + 1} / {etudiants.length}
+      </p>
       <Bouton
         ref={suivante}
         disabled={position === etudiants.length - 1}
@@ -102,14 +111,12 @@ function Evaluation() {
       >
         Suivante
       </Bouton>
-      <p className="py-1.5 text-sm text-texte-attenue">
-        {position + 1} / {etudiants.length}
-      </p>
     </div>
   );
 
   return (
-    <Vue titre="Évaluation" outils={navigation}>
+    // Changer de personne ne modifie rien : hors des champs, actif même en lecture seule.
+    <Vue titre="Évaluation" outils={choix} barre={barre}>
       <div className="flex flex-col gap-6">
         <Resultat etudiant={e} />
 

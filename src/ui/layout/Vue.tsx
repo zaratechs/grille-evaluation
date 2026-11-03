@@ -6,6 +6,11 @@ type Props = {
   titre: string;
   /** Placé avant les champs et jamais désactivé : seulement ce qui ne modifie rien. */
   outils?: ReactNode;
+  /**
+   * Comme `outils`, mais collée en bas de l'écran sur téléphone (sous 480 px), à portée du
+   * pouce ; elle se pose à la fin de la vue, sans masquer le dernier champ.
+   */
+  barre?: ReactNode;
   children: ReactNode;
 };
 
@@ -17,7 +22,7 @@ type Props = {
  * En lecture seule (autre onglet), tous les champs de la vue sont désactivés, sauf ceux
  * de `outils` (par exemple, changer de personne).
  */
-export function Vue({ titre, outils, children }: Props) {
+export function Vue({ titre, outils, barre, children }: Props) {
   const { lectureSeule } = useDossier();
   const entete = useRef<HTMLHeadingElement>(null);
   const type = useNavigationType();
@@ -33,11 +38,16 @@ export function Vue({ titre, outils, children }: Props) {
   }, [key, type]);
 
   return (
-    <section>
+    <section className="flex flex-col">
       <h1 ref={entete} tabIndex={-1} className="text-2xl font-semibold text-texte">
         {titre}
       </h1>
       {outils !== undefined && <div className="mt-6">{outils}</div>}
+      {barre !== undefined && (
+        <div className="mt-3 max-[480px]:sticky max-[480px]:bottom-0 max-[480px]:z-10 max-[480px]:order-last max-[480px]:mt-6 max-[480px]:border-t max-[480px]:border-bordure max-[480px]:bg-surface max-[480px]:py-2">
+          {barre}
+        </div>
+      )}
       <fieldset disabled={lectureSeule} className="m-0 mt-6 min-w-0 border-0 p-0">
         {children}
       </fieldset>

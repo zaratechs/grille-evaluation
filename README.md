@@ -38,6 +38,10 @@ L'application a quatre vues, chacune à sa propre adresse (`#/grille`, `#/evalua
   changent de niveau), « Retirer le niveau » pour revenir à « non évalué », un commentaire
   par critère et un commentaire général. La note se met à jour en direct ; aucune note
   n'est donnée si les poids ne font pas 100 %, ni dans la synthèse du groupe.
+- **Sur téléphone.** Sous 480 px, Précédente et Suivante restent collées en bas de
+  l'écran dans Évaluation, et chaque bouton ou choix fait au moins 44 px de haut. Dans
+  Groupe, chaque personne devient une carte (le tableau reste annoncé comme tel aux
+  lecteurs d'écran).
 - **Exports.** Dans Évaluation, « Exporter cette personne » en PDF ou en Word ; dans
   Groupe, « Exporter tout le groupe » en PDF, Word ou CSV (pour Excel en français).
 - **Vos données.** Exporter tout ou la grille seule (sans aucun nom), importer un fichier

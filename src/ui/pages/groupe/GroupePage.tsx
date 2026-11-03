@@ -108,37 +108,48 @@ export function GroupePage() {
         ) : (
           <>
             <Synthese />
-            <table className="w-full border-collapse text-sm max-sm:block">
-              <thead className="max-sm:sr-only">
-                <tr className="border-b border-bordure text-left">
-                  <th scope="col" className="py-2 pr-4 font-semibold">
+            {/* Rôles de tableau explicites : sous 640 px, le tableau s'affiche en cartes
+               (display: block), et Safari cesse alors de l'annoncer comme un tableau. */}
+            <table role="table" className="w-full border-collapse text-sm max-sm:block">
+              {/* eslint-disable-next-line jsx-a11y/no-redundant-roles -- voir le tableau */}
+              <thead role="rowgroup" className="max-sm:sr-only">
+                <tr role="row" className="border-b border-bordure text-left">
+                  <th scope="col" role="columnheader" className="py-2 pr-4 font-semibold">
                     Nom
                   </th>
-                  <th scope="col" className="py-2 pr-4 font-semibold">
+                  <th scope="col" role="columnheader" className="py-2 pr-4 font-semibold">
                     Évaluation
                   </th>
-                  <th scope="col" className="py-2 font-semibold">
+                  <th scope="col" role="columnheader" className="py-2 font-semibold">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="max-sm:block">
+              {/* eslint-disable-next-line jsx-a11y/no-redundant-roles -- voir le tableau */}
+              <tbody role="rowgroup" className="max-sm:block">
                 {etudiants.map((e, i) => (
                   <tr
                     key={e.id}
+                    role="row"
                     className="border-b border-bordure max-sm:flex max-sm:flex-col max-sm:gap-1 max-sm:py-3"
                   >
-                    <th scope="row" className="py-2 pr-4 text-left font-medium max-sm:py-0">
+                    <th
+                      scope="row"
+                      role="rowheader"
+                      className="py-2 pr-4 text-left font-medium max-sm:py-0"
+                    >
                       {e.nom}
                     </th>
-                    <td className="py-2 pr-4 text-texte-attenue max-sm:py-0">
+                    {/* eslint-disable-next-line jsx-a11y/no-interactive-element-to-noninteractive-role -- voir le tableau */}
+                    <td role="cell" className="py-2 pr-4 text-texte-attenue max-sm:py-0">
                       {texteResultat(grille, calculerResultat(grille, e))}
                     </td>
-                    <td className="py-2 max-sm:py-0">
+                    {/* eslint-disable-next-line jsx-a11y/no-interactive-element-to-noninteractive-role -- voir le tableau */}
+                    <td role="cell" className="py-2 max-sm:py-0">
                       <div className="flex flex-wrap gap-1">
                         <Link
                           to={`/evaluation?personne=${encodeURIComponent(e.id)}`}
-                          className="inline-flex min-h-9 items-center rounded-champ border border-marque-700 bg-marque-700 px-3 py-1.5 text-sm font-medium text-surface hover:bg-marque-800"
+                          className="inline-flex min-h-9 items-center max-[480px]:min-h-11 rounded-champ border border-marque-700 bg-marque-700 px-3 py-1.5 text-sm font-medium text-surface hover:bg-marque-800"
                         >
                           Évaluer
                         </Link>

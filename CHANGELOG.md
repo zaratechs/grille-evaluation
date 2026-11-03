@@ -185,6 +185,12 @@ Commits conventionnels.
 - Encadré « Pour commencer » sur la vue Grille, tant qu'elle n'a aucun critère : trois
   étapes numérotées, avec des liens vers Groupe, Évaluation et Vos données. Les boutons
   de la vue sont nommés sans être dupliqués, pour ne pas gêner le pilotage à la voix.
+- Téléphone (sous 480 px) : dans Évaluation, Précédente et Suivante passent dans une barre
+  collée en bas de l'écran, qui se pose à la fin de la vue sans masquer le dernier champ
+  (`Vue` reçoit une `barre`) ; un champ qui reçoit le focus défile au-dessus d'elle.
+  Boutons, liste des personnes et lien « Évaluer » font au moins 44 px de haut. Le
+  tableau du groupe, affiché en cartes, garde des rôles de tableau explicites pour Safari.
+  Tests de bout en bout à 320 et 390 px (`tests/e2e/mobile.spec.ts`).
 - Tests des boutons d'export : ils attendent la fin de la création du fichier, et non
   plus seulement le clic (échec en CI : le rendu CSV, chargé par `import()`, n'était pas
   encore prêt sur une machine plus lente).

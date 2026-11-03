@@ -20,7 +20,7 @@ export function Bouton({
   return (
     <button
       type={type}
-      className={`inline-flex min-h-9 items-center rounded-champ border px-3 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:cursor-not-allowed disabled:opacity-60 ${STYLES[variante]} ${className}`}
+      className={`inline-flex min-h-9 items-center max-[480px]:min-h-11 rounded-champ border px-3 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:cursor-not-allowed disabled:opacity-60 ${STYLES[variante]} ${className}`}
       {...reste}
     />
   );

@@ -19,6 +19,14 @@
     outline-offset: 2px;
   }
 
+  /* Sur téléphone, la barre Précédente / Suivante est collée en bas (vue Évaluation) : un
+     champ qui reçoit le focus défile au-dessus d'elle (WCAG 2.4.11). */
+  @media (max-width: 480px) {
+    html {
+      scroll-padding-bottom: 5rem;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
